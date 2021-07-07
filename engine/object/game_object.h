@@ -95,13 +95,33 @@ namespace eng {
 		// ‹ó‚ÌGameObject‚Ì¶¬
 		static GameObject::s_ptr createEmpty(const std::string& name);
 
-		// ”Âƒ|ƒŠ‚Ìì¬
+		// lŠpŒ`
 		static GameObject::s_ptr createPlaneXY(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 		static GameObject::s_ptr createPlaneYZ(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 		static GameObject::s_ptr createPlaneZX(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
-
-		// ƒLƒ…[ƒu‚Ìì¬
+		// ƒLƒ…[ƒu
 		static GameObject::s_ptr createCube(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// “ñ“™•ÓOŠpŒ`
+		static GameObject::s_ptr createTriangleIsosceles(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ’¼ŠpOŠpŒ`
+		static GameObject::s_ptr createTriangleRight(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		static GameObject::s_ptr createTriangleLeft(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ³OŠpŒ`
+		static GameObject::s_ptr createTriangleEquilateral(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ‹…‘Ì
+		static GameObject::s_ptr createSphere(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ƒh[ƒ€
+		static GameObject::s_ptr createDome(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ’ê–Ê‚È‚µ‚Ì‰~
+		static GameObject::s_ptr createCone(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ‰~”Õ
+		static GameObject::s_ptr createDisk(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ‰~”Õó‚ÌƒŠƒ“ƒO 
+		static GameObject::s_ptr createDiskRing(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ‰~ó‚É‚­‚è”²‚¢‚½lŠpŒ`
+		static GameObject::s_ptr createHollowOutDiskPlane(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// ‰~“›
+		static GameObject::s_ptr createCylinder(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 
 		//====================================================================================================
 	};

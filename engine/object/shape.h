@@ -19,13 +19,24 @@ namespace eng {
 		using s_ptr = std::shared_ptr<Shape>;
 		using w_ptr = std::weak_ptr<Shape>;
 
+		enum class Angle {
+			ANGLE_45,
+			ANGLE_90,
+			ANGLE_180,
+			ANGLE_360,
+		};
+
 		struct CreateDesc {
 			std::string regist_name_ = "";
 			float width_ = 10.0f;
 			float height_ = 10.0f;
 			float depth_ = 10.0f;
+			float radius_ = 5.0f;
+			float thickness_ = 3.0f;
+			float egge_lenght_ = 10.0f;
 			int stacks_ = 10;
 			int slices_ = 10;
+			Angle angle_ = Angle::ANGLE_360;
 		};
 
 	private:
@@ -42,6 +53,9 @@ namespace eng {
 
 		// 頂点バッファ、インデックスバッファへコピー
 		bool copyBuffers(Vertex3D* vertexs, uint32_t* indexs);
+
+		// インデックスの計算
+		void calcIndexs(uint32_t*& indexs, const int slices, const int stacks);
 
 		//====================================================================================================
 		// static関数
@@ -68,12 +82,34 @@ namespace eng {
 		//====================================================================================================
 		// static関数
 
-		// 四角形の生成(X,Y軸)
+		// 四角形(X,Y軸)
 		static Shape::s_ptr createPlaneXY(const CreateDesc& desc);
-		// 四角形の生成(Y,Z軸)
+		// 四角形(Y,Z軸)
 		static Shape::s_ptr createPlaneYZ(const CreateDesc& desc);
-		// 四角形の生成(Z,X軸)
+		// 四角形(Z,X軸)
 		static Shape::s_ptr createPlaneZX(const CreateDesc& desc);
+		// 二等辺三角形
+		static Shape::s_ptr createTriangleIsosceles(const CreateDesc& desc);
+		// 直角三角形(右下が直角)
+		static Shape::s_ptr createTriangleRight(const CreateDesc& desc);
+		// 直角三角形(左下が直角)
+		static Shape::s_ptr createTriangleLeft(const CreateDesc& desc);
+		// 正三角形
+		static Shape::s_ptr createTriangleEquilateral(const CreateDesc& desc);
+		// 球体
+		static Shape::s_ptr createSphere(const CreateDesc& desc);
+		// ドーム
+		static Shape::s_ptr createDome(const CreateDesc& desc);
+		// 底面なしの円錐
+		static Shape::s_ptr createCone(const CreateDesc& desc);
+		// 円盤
+		static Shape::s_ptr createDisk(const CreateDesc& desc);
+		// 円盤状のリング 
+		static Shape::s_ptr createDiskRing(const CreateDesc& desc);
+		// 円状にくり抜いた四角形
+		static Shape::s_ptr createHollowOutDiskPlane(const CreateDesc& desc);
+		// 円筒
+		static Shape::s_ptr createCylinder(const CreateDesc& desc);
 
 		//====================================================================================================
 	};

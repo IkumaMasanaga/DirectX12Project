@@ -7,6 +7,7 @@ namespace lib {
 		
 		Random::setSeed(static_cast<uint32_t>(time(0)));
 		FPSControl::setFPS(60);
+		FPSControl::end_ = std::chrono::system_clock::now();
 		Time::initialize();
 
 		return true;
