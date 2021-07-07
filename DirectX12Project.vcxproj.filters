@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="engine">
+      <UniqueIdentifier>{c0a7a2e2-5455-4db5-a653-e7aba4dc7347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{1f3736f7-b86e-4a7d-8d5b-ae4e318cd607}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="library">
+      <UniqueIdentifier>{cda7d5e2-1a79-4e03-ba4f-d2f4b5469070}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{cd0735e3-2493-492c-a164-5812dbc2dd84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\object">
+      <UniqueIdentifier>{f1c28789-f1c7-42ba-ad95-525debbeba8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\object\component">
+      <UniqueIdentifier>{f4036af6-541f-4aee-810b-10aacde41144}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="engine\object\component\renderer">
+      <UniqueIdentifier>{0b9ae197-6f71-489c-9919-34add25550af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\scene">
+      <UniqueIdentifier>{36e58333-93d0-4089-8ef9-ba0ecce7c4f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game\component">
+      <UniqueIdentifier>{19354011-b379-4d6a-86ec-801ea9ced37e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="system\dx12_manager.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\system.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\win_main.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="system\window.cpp">
+      <Filter>system</Filter>
+    </ClCompile>
+    <ClCompile Include="library\bit_flag.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\fps_control.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\library.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\math.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\matrix4x4.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\quaternion.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\random.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\time.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\utility.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\vector2.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="library\vector3.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
+    <ClCompile Include="game\scene\sample_scene.cpp">
+      <Filter>game\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="game\component\sample_component.cpp">
+      <Filter>game\component</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\component\renderer\mesh_renderer.cpp">
+      <Filter>engine\object\component\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\component\renderer\renderer.cpp">
+      <Filter>engine\object\component\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\component\camera.cpp">
+      <Filter>engine\object\component</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\component\component.cpp">
+      <Filter>engine\object\component</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\game_object.cpp">
+      <Filter>engine\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\material.cpp">
+      <Filter>engine\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\mesh.cpp">
+      <Filter>engine\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\object.cpp">
+      <Filter>engine\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\pipeline_state.cpp">
+      <Filter>engine\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\shader.cpp">
+      <Filter>engine\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\shape.cpp">
+      <Filter>engine\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\object\texture.cpp">
+      <Filter>engine\object</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\engine.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\graphics_manager.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\layer.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\scene.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="system\dx12_manager.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\system.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="system\window.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="library\bit_flag.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\bitmap.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\fps_control.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\library.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\link_linear.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\link_tree.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\math.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\matrix4x4.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\quaternion.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\random.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\shared_flyweight_map.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\singleton.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\smart_factory.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\time.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\utility.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\vector2.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="library\vector3.h">
+      <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="game\scene\sample_scene.h">
+      <Filter>game\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="game\component\sample_component.h">
+      <Filter>game\component</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\component\renderer\mesh_renderer.h">
+      <Filter>engine\object\component\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\component\renderer\renderer.h">
+      <Filter>engine\object\component\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\component\camera.h">
+      <Filter>engine\object\component</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\component\component.h">
+      <Filter>engine\object\component</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\game_object.h">
+      <Filter>engine\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\material.h">
+      <Filter>engine\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\mesh.h">
+      <Filter>engine\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\object.h">
+      <Filter>engine\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\pipeline_state.h">
+      <Filter>engine\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\shader.h">
+      <Filter>engine\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\shape.h">
+      <Filter>engine\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\texture.h">
+      <Filter>engine\object</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\engine.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\graphics_manager.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\layer.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\scene.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\transform.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
