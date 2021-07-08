@@ -2,7 +2,6 @@
 #include "mesh_renderer.h"
 #include "../camera.h"
 #include "../../mesh.h"
-#include "../../shape.h"
 #include "../../pipeline_state.h"
 #include "../../shader.h"
 #include "../../material.h"
@@ -10,7 +9,6 @@
 
 
 using namespace Microsoft::WRL;
-using namespace DirectX;
 
 namespace eng {
 

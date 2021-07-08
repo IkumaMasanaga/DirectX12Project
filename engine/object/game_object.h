@@ -1,5 +1,4 @@
 #pragma once
-#include "object.h"
 #include "shape.h"
 #include "../transform.h"
 
@@ -118,8 +117,6 @@ namespace eng {
 		static GameObject::s_ptr createDisk(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 		// ‰~”Õó‚ÌƒŠƒ“ƒO 
 		static GameObject::s_ptr createDiskRing(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
-		// ‰~ó‚É‚­‚è”²‚¢‚½lŠpŒ`
-		static GameObject::s_ptr createHollowOutDiskPlane(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 		// ‰~“›
 		static GameObject::s_ptr createCylinder(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 

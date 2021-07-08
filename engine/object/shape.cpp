@@ -544,60 +544,7 @@ namespace eng {
 		delete[] idxs;
 		return (is_complete) ? ptr : nullptr;
 	}
-	
-	Shape::s_ptr Shape::createHollowOutDiskPlane(const CreateDesc& desc) {
-		Shape::s_ptr ptr = nullptr;
-		if (isCreated(ptr, desc.regist_name_)) return ptr;		// 既に登録されている場合はそれを返す
-		CreateDesc d = desc;
-		d.slices_ = 1;
-		ptr->vertex_num_ = (d.slices_ + 1) * (d.stacks_ + 1);
-		ptr->index_num_ = d.slices_ * d.stacks_ * 6;
-		if (!ptr->createBuffers()) return nullptr;				// バッファの作成
-		Vertex3D* vtxs = new Vertex3D[ptr->vertex_num_];
-		uint32_t* idxs = new uint32_t[ptr->index_num_];
 
-		//--------------------------------------------------
-
-		// 頂点座標・UV・法線の計算
-		for (int i = 0; i < (d.slices_ + 1); ++i) {
-			for (int k = 0; k < (d.stacks_ + 1); ++k) {
-				float u = k / ((float)d.stacks_);
-				if (Angle::ANGLE_180 == d.angle_) u /= 2;
-				else if (Angle::ANGLE_90 == d.angle_) u /= 4;
-				else if (Angle::ANGLE_45 == d.angle_) u /= 8;
-				lib::Vector3 vv;
-				float rd = 2 * lib::Math::PI * u;
-				vv.x = (cosf(rd) * d.radius_);
-				vv.y = (sinf(rd) * d.radius_);
-				if (i == d.slices_) {
-					vv = lib::Vector3::normalize(vv) * d.radius_ * 2;
-					vv.x = (vv.x > d.radius_) ? d.radius_ : vv.x;
-					vv.y = (vv.y > d.radius_) ? d.radius_ : vv.y;
-					vv.x = (vv.x < -d.radius_) ? -d.radius_ : vv.x;
-					vv.y = (vv.y < -d.radius_) ? -d.radius_ : vv.y;
-				}
-
-				vv.x = -vv.x;
-
-				int a = (i * (d.stacks_ + 1)) + k;
-				vtxs[a].position = vv;
-
-				vtxs[a].uv.x = 0.5f - (vv.x / d.radius_ * 0.5f);
-				vtxs[a].uv.y = 0.5f - (vv.y / d.radius_ * 0.5f);
-
-				vtxs[a].normal = lib::Vector3::FORWARD;
-			}
-		}
-
-		//--------------------------------------------------
-
-		ptr->calcIndexs(idxs, d.slices_, d.stacks_);	// インデックスの計算
-		bool is_complete = ptr->copyBuffers(vtxs, idxs);	// バッファへコピー
-		delete[] vtxs;
-		delete[] idxs;
-		return (is_complete) ? ptr : nullptr;
-	}
-	
 	Shape::s_ptr Shape::createCylinder(const CreateDesc& desc) {
 		Shape::s_ptr ptr = nullptr;
 		if (isCreated(ptr, desc.regist_name_)) return ptr;		// 既に登録されている場合はそれを返す

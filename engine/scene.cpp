@@ -1,4 +1,3 @@
-#include "../system/window.h"
 #include "graphics_manager.h"
 #include "scene.h"
 #include "object/game_object.h"

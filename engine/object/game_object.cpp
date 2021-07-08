@@ -1,7 +1,4 @@
 #include "../engine.h"
-#include "game_object.h"
-#include "component/component.h"
-#include "component/renderer/mesh_renderer.h"
 
 
 namespace eng {
@@ -226,14 +223,6 @@ namespace eng {
 		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createDiskRing(desc), texture_file_path);
-		return ptr;
-	}
-	
-	GameObject::s_ptr GameObject::createHollowOutDiskPlane(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
-		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
-		renderer->meshs_.resize(1);
-		renderer->meshs_[0] = Mesh::createFromShape(Shape::createHollowOutDiskPlane(desc), texture_file_path);
 		return ptr;
 	}
 	

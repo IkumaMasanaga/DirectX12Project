@@ -1,6 +1,5 @@
 #include "../../system/dx12_manager.h"
 #include "pipeline_state.h"
-#include "shader.h"
 
 
 namespace eng {

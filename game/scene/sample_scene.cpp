@@ -64,10 +64,6 @@ bool SampleScene::initialize() {
 
 
 	obj1 = eng::GameObject::createDiskRing("disk_ring", desc);
-	obj1->transform_->local_position_.set(-OFFSET_2, 0.0f, -OFFSET_2);
-	obj1->addComponent<SampleComponent>();
-
-	obj1 = eng::GameObject::createHollowOutDiskPlane("hollow_out_disk_plane", desc);
 	obj1->transform_->local_position_.set(-OFFSET_1, 0.0f, -OFFSET_2);
 	obj1->addComponent<SampleComponent>();
 

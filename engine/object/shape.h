@@ -6,14 +6,14 @@
 
 namespace eng {
 
-	class Vertex3D {
-	public:
+	struct Vertex3D {
 		lib::Vector3 position;
 		lib::Vector3 normal;
 		lib::Vector2 uv;
 	};
 
 	class Shape final : public Object {
+		// “o˜^‚·‚é‚½‚ß
 		friend class lib::SharedFlyweightMap<std::string, Shape>;
 	public:
 		using s_ptr = std::shared_ptr<Shape>;
@@ -106,8 +106,6 @@ namespace eng {
 		static Shape::s_ptr createDisk(const CreateDesc& desc);
 		// ‰~”Õó‚ÌƒŠƒ“ƒO 
 		static Shape::s_ptr createDiskRing(const CreateDesc& desc);
-		// ‰~ó‚É‚­‚è”²‚¢‚½lŠpŒ`
-		static Shape::s_ptr createHollowOutDiskPlane(const CreateDesc& desc);
 		// ‰~“›
 		static Shape::s_ptr createCylinder(const CreateDesc& desc);
 

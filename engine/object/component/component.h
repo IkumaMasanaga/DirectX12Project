@@ -7,7 +7,6 @@ namespace eng {
 	class Component : public Object {
 		// 各種protected関数にアクセスするため
 		friend class GameObject;
-		//friend class lib::SmartFactory;
 	public:
 		using s_ptr = std::shared_ptr<Component>;
 		using w_ptr = std::weak_ptr<Component>;

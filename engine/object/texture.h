@@ -7,6 +7,7 @@
 namespace eng {
 
 	class Texture final : public Object {
+		// “o˜^‚·‚é‚½‚ß
 		friend class lib::SharedFlyweightMap<std::string, Texture>;
 	public:
 		using s_ptr = std::shared_ptr<Texture>;
