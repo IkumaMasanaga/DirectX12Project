@@ -147,59 +147,55 @@ namespace eng {
 				{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	 0, 24, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
 			};
 			shader_desc.input_element_size_ = 3;
-			shader_desc.create_desc_func_ = [](eng::Shader::s_ptr& s) {
 
-				D3D12_ROOT_SIGNATURE_DESC root_signature_desc = {};
-				D3D12_DESCRIPTOR_RANGE range[1] = {};
-				D3D12_ROOT_PARAMETER root_parameters[2] = {};
-				D3D12_STATIC_SAMPLER_DESC sampler_desc[1] = {};
+			D3D12_DESCRIPTOR_RANGE range[1] = {};
+			D3D12_ROOT_PARAMETER root_parameters[2] = {};
+			D3D12_STATIC_SAMPLER_DESC sampler_desc[1] = {};
 
-				//変換行列用の定数バッファ	
-				root_parameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-				root_parameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-				root_parameters[0].Descriptor.ShaderRegister = 0;
-				root_parameters[0].Descriptor.RegisterSpace = 0;
+			//変換行列用の定数バッファ	
+			root_parameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+			root_parameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+			root_parameters[0].Descriptor.ShaderRegister = 0;
+			root_parameters[0].Descriptor.RegisterSpace = 0;
 
-				//ライト用の定数バッファ
-				//root_parameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
-				//root_parameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-				//root_parameters[1].Descriptor.ShaderRegister = 1;
-				//root_parameters[1].Descriptor.RegisterSpace = 0;
+			//ライト用の定数バッファ
+			//root_parameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+			//root_parameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+			//root_parameters[1].Descriptor.ShaderRegister = 1;
+			//root_parameters[1].Descriptor.RegisterSpace = 0;
 
-				//テクスチャ
-				range[0].NumDescriptors = 1;
-				range[0].BaseShaderRegister = 0;
-				range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
-				range[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
+			//テクスチャ
+			range[0].NumDescriptors = 1;
+			range[0].BaseShaderRegister = 0;
+			range[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
+			range[0].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
-				root_parameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-				root_parameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
-				root_parameters[1].DescriptorTable.NumDescriptorRanges = 1;
-				root_parameters[1].DescriptorTable.pDescriptorRanges = &range[0];
+			root_parameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+			root_parameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+			root_parameters[1].DescriptorTable.NumDescriptorRanges = 1;
+			root_parameters[1].DescriptorTable.pDescriptorRanges = &range[0];
 
-				//サンプラ
-				sampler_desc[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
-				sampler_desc[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-				sampler_desc[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-				sampler_desc[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-				sampler_desc[0].MipLODBias = 0.0f;
-				sampler_desc[0].MaxAnisotropy = 16;
-				sampler_desc[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
-				sampler_desc[0].BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
-				sampler_desc[0].MinLOD = 0.0f;
-				sampler_desc[0].MaxLOD = D3D12_FLOAT32_MAX;
-				sampler_desc[0].ShaderRegister = 0;
-				sampler_desc[0].RegisterSpace = 0;
-				sampler_desc[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+			//サンプラ
+			sampler_desc[0].Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR;
+			sampler_desc[0].AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+			sampler_desc[0].AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+			sampler_desc[0].AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+			sampler_desc[0].MipLODBias = 0.0f;
+			sampler_desc[0].MaxAnisotropy = 16;
+			sampler_desc[0].ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+			sampler_desc[0].BorderColor = D3D12_STATIC_BORDER_COLOR_TRANSPARENT_BLACK;
+			sampler_desc[0].MinLOD = 0.0f;
+			sampler_desc[0].MaxLOD = D3D12_FLOAT32_MAX;
+			sampler_desc[0].ShaderRegister = 0;
+			sampler_desc[0].RegisterSpace = 0;
+			sampler_desc[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
-				root_signature_desc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-				root_signature_desc.NumParameters = _countof(root_parameters);
-				root_signature_desc.pParameters = root_parameters;
-				root_signature_desc.NumStaticSamplers = _countof(sampler_desc);
-				root_signature_desc.pStaticSamplers = sampler_desc;
+			shader_desc.root_signature_desc_.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
+			shader_desc.root_signature_desc_.NumParameters = _countof(root_parameters);
+			shader_desc.root_signature_desc_.pParameters = root_parameters;
+			shader_desc.root_signature_desc_.NumStaticSamplers = _countof(sampler_desc);
+			shader_desc.root_signature_desc_.pStaticSamplers = sampler_desc;
 
-				return std::move(root_signature_desc);
-			};
 			shader_desc.setting_func_ = [](ID3D12Resource* cbv, lib::Matrix4x4* world, lib::Matrix4x4* view_projection) {
 
 				//全ての変換行列
@@ -230,88 +226,83 @@ namespace eng {
 			// そのためこれらの設定を変えた描画を行いたい場合は PSO を複数個作りどれを使って描画するか管理する必要がある
 			eng::PipelineState::CreateDesc pso_desc;
 			pso_desc.shader_ = default_shader_;
-			pso_desc.create_desc_func_ = [pso_desc](eng::PipelineState::s_ptr& p) {
 
-				D3D12_GRAPHICS_PIPELINE_STATE_DESC pipeline_state_desc = {};
-
+			// グラフィックスパイプラインの状態オブジェクトを作成
 				//シェーダーの設定
-				pipeline_state_desc.VS.pShaderBytecode = pso_desc.shader_->vertex_shader_->GetBufferPointer();
-				pipeline_state_desc.VS.BytecodeLength = pso_desc.shader_->vertex_shader_->GetBufferSize();
-				pipeline_state_desc.PS.pShaderBytecode = pso_desc.shader_->pixel_shader_->GetBufferPointer();
-				pipeline_state_desc.PS.BytecodeLength = pso_desc.shader_->pixel_shader_->GetBufferSize();
+			pso_desc.pso_desc_.VS.pShaderBytecode = pso_desc.shader_->vertex_shader_->GetBufferPointer();
+			pso_desc.pso_desc_.VS.BytecodeLength = pso_desc.shader_->vertex_shader_->GetBufferSize();
+			pso_desc.pso_desc_.PS.pShaderBytecode = pso_desc.shader_->pixel_shader_->GetBufferPointer();
+			pso_desc.pso_desc_.PS.BytecodeLength = pso_desc.shader_->pixel_shader_->GetBufferSize();
 
-				//インプットレイアウトの設定
-				pipeline_state_desc.InputLayout.pInputElementDescs = pso_desc.shader_->input_element_desc_;
-				pipeline_state_desc.InputLayout.NumElements = pso_desc.shader_->input_element_size_;
+			//インプットレイアウトの設定
+			pso_desc.pso_desc_.InputLayout.pInputElementDescs = pso_desc.shader_->input_element_desc_;
+			pso_desc.pso_desc_.InputLayout.NumElements = pso_desc.shader_->input_element_size_;
 
-				//サンプル系の設定
-				pipeline_state_desc.SampleDesc.Count = 1;
-				pipeline_state_desc.SampleDesc.Quality = 0;
-				pipeline_state_desc.SampleMask = UINT_MAX;
+			//サンプル系の設定
+			pso_desc.pso_desc_.SampleDesc.Count = 1;
+			pso_desc.pso_desc_.SampleDesc.Quality = 0;
+			pso_desc.pso_desc_.SampleMask = UINT_MAX;
 
-				//レンダーターゲットの設定
-				pipeline_state_desc.NumRenderTargets = 1;
-				pipeline_state_desc.RTVFormats[0] = DXGI_FORMAT_B8G8R8A8_UNORM;
+			//レンダーターゲットの設定
+			pso_desc.pso_desc_.NumRenderTargets = 1;
+			pso_desc.pso_desc_.RTVFormats[0] = DXGI_FORMAT_B8G8R8A8_UNORM;
 
-				//三角形に設定
-				pipeline_state_desc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+			//三角形に設定
+			pso_desc.pso_desc_.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
-				//ルートシグネチャ
-				pipeline_state_desc.pRootSignature = pso_desc.shader_->root_signature_.Get();
+			//ルートシグネチャ
+			pso_desc.pso_desc_.pRootSignature = pso_desc.shader_->root_signature_.Get();
 
-				//ラスタライザステートの設定
-				pipeline_state_desc.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
-				//pipeline_state_desc.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
-				//pipeline_state_desc.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
-				//pipeline_state_desc.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
-				pipeline_state_desc.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
-				pipeline_state_desc.RasterizerState.FrontCounterClockwise = FALSE;
-				pipeline_state_desc.RasterizerState.DepthBias = 0;
-				pipeline_state_desc.RasterizerState.DepthBiasClamp = 0;
-				pipeline_state_desc.RasterizerState.SlopeScaledDepthBias = 0;
-				pipeline_state_desc.RasterizerState.DepthClipEnable = TRUE;
-				pipeline_state_desc.RasterizerState.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
-				pipeline_state_desc.RasterizerState.AntialiasedLineEnable = FALSE;
-				pipeline_state_desc.RasterizerState.MultisampleEnable = FALSE;
+			//ラスタライザステートの設定
+			pso_desc.pso_desc_.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
+			//pso_desc.pso_desc_.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
+			//pso_desc.pso_desc_.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
+			//pso_desc.pso_desc_.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+			pso_desc.pso_desc_.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+			pso_desc.pso_desc_.RasterizerState.FrontCounterClockwise = FALSE;
+			pso_desc.pso_desc_.RasterizerState.DepthBias = 0;
+			pso_desc.pso_desc_.RasterizerState.DepthBiasClamp = 0;
+			pso_desc.pso_desc_.RasterizerState.SlopeScaledDepthBias = 0;
+			pso_desc.pso_desc_.RasterizerState.DepthClipEnable = TRUE;
+			pso_desc.pso_desc_.RasterizerState.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+			pso_desc.pso_desc_.RasterizerState.AntialiasedLineEnable = FALSE;
+			pso_desc.pso_desc_.RasterizerState.MultisampleEnable = FALSE;
 
-				//ブレンドステートの設定
-				for (int i = 0; i < _countof(pipeline_state_desc.BlendState.RenderTarget); ++i) {
-					pipeline_state_desc.BlendState.RenderTarget[i].BlendEnable = FALSE;
-					pipeline_state_desc.BlendState.RenderTarget[i].SrcBlend = D3D12_BLEND_ONE;
-					pipeline_state_desc.BlendState.RenderTarget[i].DestBlend = D3D12_BLEND_ZERO;
-					pipeline_state_desc.BlendState.RenderTarget[i].BlendOp = D3D12_BLEND_OP_ADD;
-					pipeline_state_desc.BlendState.RenderTarget[i].SrcBlendAlpha = D3D12_BLEND_ONE;
-					pipeline_state_desc.BlendState.RenderTarget[i].DestBlendAlpha = D3D12_BLEND_ZERO;
-					pipeline_state_desc.BlendState.RenderTarget[i].BlendOpAlpha = D3D12_BLEND_OP_ADD;
-					pipeline_state_desc.BlendState.RenderTarget[i].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
-					pipeline_state_desc.BlendState.RenderTarget[i].LogicOpEnable = FALSE;
-					pipeline_state_desc.BlendState.RenderTarget[i].LogicOp = D3D12_LOGIC_OP_CLEAR;
-				}
-				pipeline_state_desc.BlendState.AlphaToCoverageEnable = FALSE;
-				pipeline_state_desc.BlendState.IndependentBlendEnable = FALSE;
+			//ブレンドステートの設定
+			for (int i = 0; i < _countof(pso_desc.pso_desc_.BlendState.RenderTarget); ++i) {
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].BlendEnable = FALSE;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].SrcBlend = D3D12_BLEND_ONE;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].DestBlend = D3D12_BLEND_ZERO;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].BlendOp = D3D12_BLEND_OP_ADD;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].SrcBlendAlpha = D3D12_BLEND_ONE;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].DestBlendAlpha = D3D12_BLEND_ZERO;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].BlendOpAlpha = D3D12_BLEND_OP_ADD;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].LogicOpEnable = FALSE;
+				pso_desc.pso_desc_.BlendState.RenderTarget[i].LogicOp = D3D12_LOGIC_OP_CLEAR;
+			}
+			pso_desc.pso_desc_.BlendState.AlphaToCoverageEnable = FALSE;
+			pso_desc.pso_desc_.BlendState.IndependentBlendEnable = FALSE;
 
-				//デプスステンシルステートの設定
-				pipeline_state_desc.DepthStencilState.DepthEnable = TRUE;								//深度テストあり
-				pipeline_state_desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
-				pipeline_state_desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-				pipeline_state_desc.DepthStencilState.StencilEnable = FALSE;							//ステンシルテストなし
-				pipeline_state_desc.DepthStencilState.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK;
-				pipeline_state_desc.DepthStencilState.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK;
+			//デプスステンシルステートの設定
+			pso_desc.pso_desc_.DepthStencilState.DepthEnable = TRUE;								//深度テストあり
+			pso_desc.pso_desc_.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+			pso_desc.pso_desc_.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
+			pso_desc.pso_desc_.DepthStencilState.StencilEnable = FALSE;							//ステンシルテストなし
+			pso_desc.pso_desc_.DepthStencilState.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK;
+			pso_desc.pso_desc_.DepthStencilState.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK;
 
-				pipeline_state_desc.DepthStencilState.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
-				pipeline_state_desc.DepthStencilState.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
-				pipeline_state_desc.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-				pipeline_state_desc.DepthStencilState.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+			pso_desc.pso_desc_.DepthStencilState.FrontFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+			pso_desc.pso_desc_.DepthStencilState.FrontFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+			pso_desc.pso_desc_.DepthStencilState.FrontFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+			pso_desc.pso_desc_.DepthStencilState.FrontFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 
-				pipeline_state_desc.DepthStencilState.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
-				pipeline_state_desc.DepthStencilState.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
-				pipeline_state_desc.DepthStencilState.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
-				pipeline_state_desc.DepthStencilState.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
+			pso_desc.pso_desc_.DepthStencilState.BackFace.StencilFailOp = D3D12_STENCIL_OP_KEEP;
+			pso_desc.pso_desc_.DepthStencilState.BackFace.StencilDepthFailOp = D3D12_STENCIL_OP_KEEP;
+			pso_desc.pso_desc_.DepthStencilState.BackFace.StencilPassOp = D3D12_STENCIL_OP_KEEP;
+			pso_desc.pso_desc_.DepthStencilState.BackFace.StencilFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 
-				pipeline_state_desc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
-
-				return std::move(pipeline_state_desc);
-			};
+			pso_desc.pso_desc_.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
 			default_pso_ = eng::PipelineState::create(pso_desc);
 			if (!default_pso_) return false;

@@ -20,7 +20,7 @@ namespace eng {
 			std::string pixel_target_ = "";
 			D3D12_INPUT_ELEMENT_DESC* input_element_desc_ = nullptr;
 			UINT input_element_size_ = 0;
-			std::function<D3D12_ROOT_SIGNATURE_DESC(Shader::s_ptr&)> create_desc_func_;
+			D3D12_ROOT_SIGNATURE_DESC root_signature_desc_ = {};
 			std::function<void(ID3D12Resource*, lib::Matrix4x4*, lib::Matrix4x4*)> setting_func_;
 		};
 

@@ -8,10 +8,9 @@ namespace eng {
 	Shader::s_ptr Shader::loadOfFlyweight(const CreateDesc& desc) {
 		Shader::s_ptr ptr = Shader::createShared<Shader>();
 
-		D3D12_ROOT_SIGNATURE_DESC root_signature_desc = desc.create_desc_func_(ptr);
 		Microsoft::WRL::ComPtr<ID3DBlob> blob;
 
-		if (FAILED(D3D12SerializeRootSignature(&root_signature_desc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, nullptr))) return nullptr;		
+		if (FAILED(D3D12SerializeRootSignature(&desc.root_signature_desc_, D3D_ROOT_SIGNATURE_VERSION_1, &blob, nullptr))) return nullptr;		
 		if (FAILED(sys::Dx12Manager::getInstance().device_->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&ptr->root_signature_)))) return nullptr;
 
 #if defined(_DEBUG)

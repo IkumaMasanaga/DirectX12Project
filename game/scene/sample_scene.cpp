@@ -11,6 +11,7 @@ bool SampleScene::initialize() {
 	const float OFFSET_1 = 8.0f;
 	const float OFFSET_2 = 24.0f;
 
+
 	obj1 = eng::GameObject::createPlaneXY("plane_xy", desc);
 	obj1->transform_->local_position_.set(-OFFSET_2, 0.0f, OFFSET_2);
 	obj1->addComponent<SampleComponent>();

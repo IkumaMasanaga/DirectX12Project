@@ -17,7 +17,7 @@ namespace eng {
 		struct CreateDesc {
 			std::string regist_name_ = "default";
 			std::shared_ptr<Shader> shader_ = nullptr;
-			std::function<D3D12_GRAPHICS_PIPELINE_STATE_DESC(PipelineState::s_ptr&)> create_desc_func_;
+			D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc_ = {};
 		};
 
 	private:

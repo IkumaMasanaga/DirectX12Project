@@ -241,10 +241,11 @@ namespace eng {
 
 		// 頂点座標・UV・法線の計算
 		for (int i = 0; i < (desc.slices_ + 1); ++i) {
-			float x = -(desc.width_ * 0.5f) + (desc.stacks_ * (i * (1.0f / desc.slices_)));
+			//float x = -(desc.width_ * 0.5f) + (desc.stacks_ * (i * (1.0f / desc.slices_)));
 			for (int k = 0; k < (desc.stacks_ + 1); ++k) {
 				int a = (i * (desc.stacks_ + 1)) + k;
-				vtxs[a].position.x = x - ((desc.width_ / desc.stacks_ * k) * (i * (1.0f / desc.slices_)));
+				//vtxs[a].position.x = x - ((desc.width_ / desc.stacks_ * k) * (i * (1.0f / desc.slices_)));
+				vtxs[a].position.x = (-(desc.width_ * 0.5f) + (i * (desc.width_ / desc.stacks_))) - ((desc.width_ / desc.stacks_ * k) * (i * (1.0f / desc.slices_)));
 				vtxs[a].position.y = (desc.height_ * 0.5f) - (desc.height_ / desc.slices_ * i);
 				vtxs[a].position.z = 0;
 
