@@ -1,5 +1,6 @@
 #pragma once
-#include "shape.h"
+#include "object.h"
+#include "../graphics/shape.h"
 #include "../transform.h"
 
 

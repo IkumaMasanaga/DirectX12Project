@@ -1,10 +1,10 @@
 #include "../../system/dx12_manager.h"
-#include "../graphics_manager.h"
+#include "../graphics/graphics_manager.h"
+#include "../graphics/shape.h"
+#include "../graphics/texture.h"
+#include "../graphics/pipeline_state.h"
 #include "mesh.h"
-#include "shape.h"
 #include "material.h"
-#include "texture.h"
-#include "pipeline_state.h"
 
 
 namespace eng {

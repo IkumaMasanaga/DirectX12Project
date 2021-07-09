@@ -1,20 +1,19 @@
 #pragma once
 #include <wrl.h>
-#include "../system/d3dx12.h"
+#include "../../system/d3dx12.h"
 
 
 namespace eng {
 
 	class DescriptorHandle final {
-		friend class DescriptorManager;
 	private:
-		DescriptorHandle() : handle_cpu_(), handle_gpu_() {}
-		DescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle_cpu, D3D12_GPU_DESCRIPTOR_HANDLE handle_gpu) : handle_cpu_(handle_cpu), handle_gpu_(handle_gpu) {}
-
 		D3D12_CPU_DESCRIPTOR_HANDLE handle_cpu_;
 		D3D12_GPU_DESCRIPTOR_HANDLE handle_gpu_;
 
 	public:
+		DescriptorHandle() : handle_cpu_(), handle_gpu_() {}
+		DescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle_cpu, D3D12_GPU_DESCRIPTOR_HANDLE handle_gpu) : handle_cpu_(handle_cpu), handle_gpu_(handle_gpu) {}
+		~DescriptorHandle() {}
 
 		operator D3D12_CPU_DESCRIPTOR_HANDLE() const { return handle_cpu_; }
 		operator D3D12_GPU_DESCRIPTOR_HANDLE() const { return handle_gpu_; }
@@ -22,11 +21,7 @@ namespace eng {
 	};
 
 	class DescriptorManager final {
-		friend class GraphicsManager;
 	private:
-		DescriptorManager(const D3D12_DESCRIPTOR_HEAP_DESC& desc);
-		~DescriptorManager() {}
-
 		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heap_;
 		CD3DX12_CPU_DESCRIPTOR_HANDLE handle_cpu_;
 		CD3DX12_GPU_DESCRIPTOR_HANDLE handle_gpu_;
@@ -34,6 +29,9 @@ namespace eng {
 		UINT increment_size_ = 0;
 		std::list<DescriptorHandle> free_list_;
 	public:
+		DescriptorManager(const D3D12_DESCRIPTOR_HEAP_DESC& desc);
+		~DescriptorManager() {}
+		
 		inline Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> getHeap() const { return heap_; }
 
 		inline DescriptorHandle alloc() {

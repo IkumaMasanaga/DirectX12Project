@@ -17,6 +17,7 @@
 #include "fps_control.h"
 #include "utility.h"
 #include "debug.h"
+#include "color.h"
 
 
 namespace lib {

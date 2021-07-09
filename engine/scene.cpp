@@ -1,9 +1,9 @@
 #include "../system/d3dx12.h"
 
-#include "graphics_manager.h"
+#include "graphics/graphics_manager.h"
+#include "graphics/pipeline_state.h"
 #include "scene.h"
 #include "object/game_object.h"
-#include "object/pipeline_state.h"
 #include "object/component/camera.h"
 #include "object/component/renderer/renderer.h"
 

@@ -1,19 +1,19 @@
 #pragma once
 #include <wrl.h>
 #include <d3d12.h>
-#include "object.h"
+#include "../../library/library.h"
 
 
 namespace eng {
 
-	class Shader final : public Object {
+	class Shader final : public lib::SmartFactory {
 		friend class lib::SharedFlyweightMap<LPCWSTR, Shader>;
 	public:
 		using s_ptr = std::shared_ptr<Shader>;
 		using w_ptr = std::weak_ptr<Shader>;
 
 		struct CreateDesc {
-			LPCWSTR file_path_ = L"engine/graphics/default_shader.fx";
+			LPCWSTR file_path_ = L"engine/resources/default_shader.fx";
 			std::string vertex_func_name_ = "";
 			std::string vertex_target_ = "";
 			std::string pixel_func_name_ = "";

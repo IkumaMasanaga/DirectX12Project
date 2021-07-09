@@ -2,8 +2,8 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include <dxgi1_4.h>
-#include "../system/system.h"
-#include "../library/library.h"
+#include "../../system/system.h"
+#include "../../library/library.h"
 
 
 namespace eng {
@@ -27,7 +27,6 @@ namespace eng {
 		// static’è”
 
 		// ƒtƒŒ[ƒ€”
-		// •\–Ê‚Æ— –Ê
 		inline static constexpr UINT FRAME_COUNT = 2;
 
 		//====================================================================================================

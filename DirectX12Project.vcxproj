@@ -80,10 +80,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="engine\depth_stencil_view.cpp" />
-    <ClCompile Include="engine\descriptor_manager.cpp" />
     <ClCompile Include="engine\engine.cpp" />
-    <ClCompile Include="engine\graphics_manager.cpp" />
+    <ClCompile Include="engine\graphics\depth_stencil_view.cpp" />
+    <ClCompile Include="engine\graphics\descriptor_manager.cpp" />
+    <ClCompile Include="engine\graphics\graphics_manager.cpp" />
+    <ClCompile Include="engine\graphics\pipeline_state.cpp" />
+    <ClCompile Include="engine\graphics\render_target_view.cpp" />
+    <ClCompile Include="engine\graphics\shader.cpp" />
+    <ClCompile Include="engine\graphics\shape.cpp" />
+    <ClCompile Include="engine\graphics\texture.cpp" />
     <ClCompile Include="engine\layer.cpp" />
     <ClCompile Include="engine\object\component\camera.cpp" />
     <ClCompile Include="engine\object\component\component.cpp" />
@@ -93,15 +98,11 @@
     <ClCompile Include="engine\object\material.cpp" />
     <ClCompile Include="engine\object\mesh.cpp" />
     <ClCompile Include="engine\object\object.cpp" />
-    <ClCompile Include="engine\object\pipeline_state.cpp" />
-    <ClCompile Include="engine\object\shader.cpp" />
-    <ClCompile Include="engine\object\shape.cpp" />
-    <ClCompile Include="engine\object\texture.cpp" />
-    <ClCompile Include="engine\render_target_view.cpp" />
     <ClCompile Include="engine\scene.cpp" />
     <ClCompile Include="game\component\sample_component.cpp" />
     <ClCompile Include="game\scene\sample_scene.cpp" />
     <ClCompile Include="library\bit_flag.cpp" />
+    <ClCompile Include="library\color.cpp" />
     <ClCompile Include="library\debug.cpp" />
     <ClCompile Include="library\fps_control.cpp" />
     <ClCompile Include="library\library.cpp" />
@@ -119,10 +120,15 @@
     <ClCompile Include="system\win_main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="engine\depth_stencil_view.h" />
-    <ClInclude Include="engine\discriptor_manager.h" />
     <ClInclude Include="engine\engine.h" />
-    <ClInclude Include="engine\graphics_manager.h" />
+    <ClInclude Include="engine\graphics\depth_stencil_view.h" />
+    <ClInclude Include="engine\graphics\discriptor_manager.h" />
+    <ClInclude Include="engine\graphics\graphics_manager.h" />
+    <ClInclude Include="engine\graphics\pipeline_state.h" />
+    <ClInclude Include="engine\graphics\render_target_view.h" />
+    <ClInclude Include="engine\graphics\shader.h" />
+    <ClInclude Include="engine\graphics\shape.h" />
+    <ClInclude Include="engine\graphics\texture.h" />
     <ClInclude Include="engine\layer.h" />
     <ClInclude Include="engine\object\component\camera.h" />
     <ClInclude Include="engine\object\component\component.h" />
@@ -132,17 +138,13 @@
     <ClInclude Include="engine\object\material.h" />
     <ClInclude Include="engine\object\mesh.h" />
     <ClInclude Include="engine\object\object.h" />
-    <ClInclude Include="engine\object\pipeline_state.h" />
-    <ClInclude Include="engine\object\shader.h" />
-    <ClInclude Include="engine\object\shape.h" />
-    <ClInclude Include="engine\object\texture.h" />
-    <ClInclude Include="engine\render_target_view.h" />
     <ClInclude Include="engine\scene.h" />
     <ClInclude Include="engine\transform.h" />
     <ClInclude Include="game\component\sample_component.h" />
     <ClInclude Include="game\scene\sample_scene.h" />
     <ClInclude Include="library\bitmap.h" />
     <ClInclude Include="library\bit_flag.h" />
+    <ClInclude Include="library\color.h" />
     <ClInclude Include="library\debug.h" />
     <ClInclude Include="library\fps_control.h" />
     <ClInclude Include="library\library.h" />

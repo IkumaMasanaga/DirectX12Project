@@ -1,11 +1,11 @@
-#include "../../../graphics_manager.h"
+#include "../../../graphics/graphics_manager.h"
+#include "../../../graphics/pipeline_state.h"
+#include "../../../graphics/shader.h"
+#include "../../../graphics/texture.h"
 #include "mesh_renderer.h"
 #include "../camera.h"
 #include "../../mesh.h"
-#include "../../pipeline_state.h"
-#include "../../shader.h"
 #include "../../material.h"
-#include "../../texture.h"
 
 
 using namespace Microsoft::WRL;
@@ -16,7 +16,7 @@ namespace eng {
 
 		GraphicsManager& mgr = GraphicsManager::getInstance();
 
-		//カメラの設定
+		// カメラの設定
 		lib::Matrix4x4 view_projection = camera->getViewMatrix4x4() * camera->getProjectionMatrix4x4();
 
 		std::vector<Mesh::s_ptr>::iterator it = meshs_.begin();
@@ -30,18 +30,19 @@ namespace eng {
 				continue;
 			}
 
-			//ルートシグネチャとPSOの設定
+			// ルートシグネチャとPSOの設定
 			mgr.command_list_->SetGraphicsRootSignature((*it)->pso_->shader_->root_signature_.Get());
 			mgr.command_list_->SetPipelineState((*it)->pso_->pso_.Get());
 
-			//テクスチャをシェーダのレジスタにセット
+			// テクスチャをシェーダのレジスタにセット
+			// テクスチャが設定されていない場合はデフォルトを設定するように変更する
 			mgr.command_list_->SetDescriptorHeaps(1, (*it)->material_->tex_diffuse_->descriptor_heap_.GetAddressOf());
 			mgr.command_list_->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->descriptor_heap_->GetGPUDescriptorHandleForHeapStart());
 
 
 			//--------------------------------------------------
 
-			//ワールド行列
+			// ワールド行列
 			lib::Matrix4x4 m = (*it)->transform_->getWorldMatrix4x4() * getGameObject()->transform_->getWorldMatrix4x4();
 
 			// 定数バッファに設定
@@ -52,7 +53,7 @@ namespace eng {
 
 			//--------------------------------------------------
 
-			//インデックスを使用し、トライアングルリストを描画
+			// インデックスを使用し、トライアングルリストを描画
 			D3D12_VERTEX_BUFFER_VIEW vertex_view{};
 			vertex_view.BufferLocation = (*it)->shape_->vbo_->GetGPUVirtualAddress();
 			vertex_view.StrideInBytes = sizeof(Vertex3D);
@@ -68,7 +69,7 @@ namespace eng {
 			mgr.command_list_->IASetIndexBuffer(&index_view);
 
 
-			//描画
+			// 描画
 			mgr.command_list_->DrawIndexedInstanced((*it)->shape_->index_num_, 1, 0, 0, 0);
 
 			++it;

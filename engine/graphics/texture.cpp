@@ -90,7 +90,7 @@ namespace eng {
 	}
 
 	Texture::s_ptr Texture::loadFromFile(const std::string& file_path) {
-		std::string path = (file_path.empty()) ? "engine/graphics/default_texture.bmp" : file_path;
+		std::string path = (file_path.empty()) ? "engine/resources/default_texture.bmp" : file_path;
 		return regist_map_.load<std::string>(path, path);
 	}
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <wrl.h>
 #include <d3d12.h>
-#include "object.h"
+#include "../../library/library.h"
 
 
 namespace eng {
@@ -12,7 +12,7 @@ namespace eng {
 		lib::Vector2 uv;
 	};
 
-	class Shape final : public Object {
+	class Shape final : public lib::SmartFactory {
 		// “o˜^‚·‚é‚½‚ß
 		friend class lib::SharedFlyweightMap<std::string, Shape>;
 	public:

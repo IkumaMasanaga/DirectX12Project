@@ -1,10 +1,10 @@
-#include "../system/dx12_manager.h"
-#include "../system/window.h"
+#include "../../system/dx12_manager.h"
+#include "../../system/window.h"
 #include "graphics_manager.h"
 #include "discriptor_manager.h"
-#include "object/pipeline_state.h"
-#include "object/shader.h"
-#include "object/texture.h"
+#include "pipeline_state.h"
+#include "shader.h"
+#include "texture.h"
 
 
 using namespace Microsoft::WRL;
@@ -311,7 +311,7 @@ namespace eng {
 		}
 
 		/* デフォルトテクスチャの作成 */ {
-			default_texture_ = Texture::loadFromFile("engine/graphics/default_texture.bmp");
+			default_texture_ = Texture::loadFromFile("");
 			if (!default_texture_) return false;
 		}
 

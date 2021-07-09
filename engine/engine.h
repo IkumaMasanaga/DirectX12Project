@@ -2,19 +2,20 @@
 #include "../library/library.h"
 #include "../system/system.h"
 
-#include "graphics_manager.h"
 #include "scene.h"
 #include "layer.h"
 #include "transform.h"
 
 #include "object/object.h"
 #include "object/game_object.h"
-#include "object/shape.h"
-#include "object/texture.h"
-#include "object/shader.h"
 #include "object/material.h"
-#include "object/pipeline_state.h"
 #include "object/mesh.h"
+
+#include "graphics/graphics_manager.h"
+#include "graphics/shape.h"
+#include "graphics/texture.h"
+#include "graphics/shader.h"
+#include "graphics/pipeline_state.h"
 
 #include "object/component/component.h"
 #include "object/component/camera.h"

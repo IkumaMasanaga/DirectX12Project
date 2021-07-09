@@ -1,14 +1,14 @@
 #pragma once
 #include <wrl.h>
 #include <d3d12.h>
-#include "object.h"
+#include "../../library/library.h"
 
 
 namespace eng {
 
 	class Shader;
 
-	class PipelineState final : public Object {
+	class PipelineState final : public lib::SmartFactory {
 		friend class lib::SharedFlyweightMap<std::string, PipelineState>;
 	public:
 		using s_ptr = std::shared_ptr<PipelineState>;
