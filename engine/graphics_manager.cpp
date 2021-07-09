@@ -257,8 +257,8 @@ namespace eng {
 			pso_desc.pso_desc_.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
 			//pso_desc.pso_desc_.RasterizerState.CullMode = D3D12_CULL_MODE_FRONT;
 			//pso_desc.pso_desc_.RasterizerState.CullMode = D3D12_CULL_MODE_BACK;
-			//pso_desc.pso_desc_.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
-			pso_desc.pso_desc_.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
+			pso_desc.pso_desc_.RasterizerState.FillMode = D3D12_FILL_MODE_SOLID;
+			//pso_desc.pso_desc_.RasterizerState.FillMode = D3D12_FILL_MODE_WIREFRAME;
 			pso_desc.pso_desc_.RasterizerState.FrontCounterClockwise = FALSE;
 			pso_desc.pso_desc_.RasterizerState.DepthBias = 0;
 			pso_desc.pso_desc_.RasterizerState.DepthBiasClamp = 0;

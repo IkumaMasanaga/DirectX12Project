@@ -6,9 +6,9 @@ namespace eng {
 	lib::Matrix4x4 Camera::getViewMatrix4x4() const {
 		lib::Matrix4x4 wm = getTransform()->getWorldMatrix4x4();
 		lib::Vector3 pos = lib::Vector3(wm._41, wm._42, wm._43);
-		lib::Vector3 x = lib::Vector3::normalize(lib::Vector3(wm._11, wm._12, wm._13));
-		lib::Vector3 y = lib::Vector3::normalize(lib::Vector3(wm._21, wm._22, wm._23));
-		lib::Vector3 z = lib::Vector3::normalize(lib::Vector3(wm._31, wm._32, wm._33) - pos);
+		lib::Vector3 z = lib::Vector3::normalize(lib::Vector3(wm._31, wm._32, wm._33));
+		lib::Vector3 x = lib::Vector3::normalize(lib::Vector3::cross(lib::Vector3(wm._21, wm._22, wm._23), z));
+		lib::Vector3 y = lib::Vector3::cross(z, x);
 		return lib::Matrix4x4(
 			x.x,                        y.x,                        z.x,                        0.0f,
 			x.y,                        y.y,                        z.y,                        0.0f,
