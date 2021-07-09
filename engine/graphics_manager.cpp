@@ -1,6 +1,7 @@
 #include "../system/dx12_manager.h"
 #include "../system/window.h"
 #include "graphics_manager.h"
+#include "discriptor_manager.h"
 #include "object/pipeline_state.h"
 #include "object/shader.h"
 #include "object/texture.h"
@@ -81,6 +82,7 @@ namespace eng {
 			dsv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
 			dsv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 			dsv_heap_desc.NodeMask = 0;
+
 			if (FAILED(mgr.device_->CreateDescriptorHeap(&dsv_heap_desc, IID_PPV_ARGS(&dsv_heap_)))) return false;
 
 			//深度バッファの作成

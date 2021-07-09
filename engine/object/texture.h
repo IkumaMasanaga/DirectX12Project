@@ -35,7 +35,7 @@ namespace eng {
 		UINT width_ = 0;	// 幅
 		UINT height_ = 0;	// 高さ
 		Microsoft::WRL::ComPtr<ID3D12Resource> texture_;				// テクスチャ
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptor_heap_;	// GPU上へのアドレスのようなもの
+		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptor_heap_;	// GPU上へのアドレスのようなもの のちにハンドルへ変更する
 
 		//====================================================================================================
 		// static関数

@@ -81,7 +81,7 @@ bool SampleScene::initialize() {
 
 void SampleScene::lateUpdate() {
 
-	lib_DebugLog("delta_time = %f", lib::Time::getDeltaTime());
+
 
 }
 

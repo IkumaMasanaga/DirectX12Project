@@ -80,6 +80,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="engine\depth_stencil_view.cpp" />
+    <ClCompile Include="engine\descriptor_manager.cpp" />
     <ClCompile Include="engine\engine.cpp" />
     <ClCompile Include="engine\graphics_manager.cpp" />
     <ClCompile Include="engine\layer.cpp" />
@@ -95,6 +97,7 @@
     <ClCompile Include="engine\object\shader.cpp" />
     <ClCompile Include="engine\object\shape.cpp" />
     <ClCompile Include="engine\object\texture.cpp" />
+    <ClCompile Include="engine\render_target_view.cpp" />
     <ClCompile Include="engine\scene.cpp" />
     <ClCompile Include="game\component\sample_component.cpp" />
     <ClCompile Include="game\scene\sample_scene.cpp" />
@@ -116,6 +119,8 @@
     <ClCompile Include="system\win_main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="engine\depth_stencil_view.h" />
+    <ClInclude Include="engine\discriptor_manager.h" />
     <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\graphics_manager.h" />
     <ClInclude Include="engine\layer.h" />
@@ -131,6 +136,7 @@
     <ClInclude Include="engine\object\shader.h" />
     <ClInclude Include="engine\object\shape.h" />
     <ClInclude Include="engine\object\texture.h" />
+    <ClInclude Include="engine\render_target_view.h" />
     <ClInclude Include="engine\scene.h" />
     <ClInclude Include="engine\transform.h" />
     <ClInclude Include="game\component\sample_component.h" />
@@ -153,6 +159,7 @@
     <ClInclude Include="library\utility.h" />
     <ClInclude Include="library\vector2.h" />
     <ClInclude Include="library\vector3.h" />
+    <ClInclude Include="system\d3dx12.h" />
     <ClInclude Include="system\dx12_manager.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="system\window.h" />

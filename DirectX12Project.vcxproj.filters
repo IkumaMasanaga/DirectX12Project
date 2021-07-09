@@ -132,6 +132,15 @@
     <ClCompile Include="library\debug.cpp">
       <Filter>library</Filter>
     </ClCompile>
+    <ClCompile Include="engine\descriptor_manager.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\render_target_view.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
+    <ClCompile Include="engine\depth_stencil_view.cpp">
+      <Filter>engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\dx12_manager.h">
@@ -253,6 +262,18 @@
     </ClInclude>
     <ClInclude Include="library\debug.h">
       <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="system\d3dx12.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\discriptor_manager.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\render_target_view.h">
+      <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\depth_stencil_view.h">
+      <Filter>engine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

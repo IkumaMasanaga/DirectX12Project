@@ -13,9 +13,9 @@ namespace sys {
 
 #if defined(_DEBUG)
 		/* DirectX12のデバッグレイヤーを有効にする */ {
-			ComPtr<ID3D12Debug>	debugController;
-			if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
-				debugController->EnableDebugLayer();
+			ComPtr<ID3D12Debug>	debug_controller;
+			if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debug_controller)))) {
+				debug_controller->EnableDebugLayer();
 			}
 		}
 #endif

@@ -1,3 +1,5 @@
+#include "../system/d3dx12.h"
+
 #include "graphics_manager.h"
 #include "scene.h"
 #include "object/game_object.h"
@@ -55,8 +57,11 @@ namespace eng {
 		if (FAILED(mgr.command_allocator_->Reset())) return;
 		if (FAILED(mgr.command_list_->Reset(mgr.command_allocator_.Get(), mgr.default_pso_->pso_.Get()))) return;
 
+		// これどこに持っていく？
+		//----------------------------------------------------------------------------------------------------
 		mgr.command_list_->RSSetViewports(1, &sys::Window::VIEWPORT);
 		mgr.command_list_->RSSetScissorRects(1, &sys::Window::SCISSOR_RECT);
+		//----------------------------------------------------------------------------------------------------
 
 		// 【 バックバッファが描画ターゲットとして使用できるようになるまで待つ 】
 		// 複数個の GPUコアが 並列作業をする dx12 では
@@ -64,26 +69,25 @@ namespace eng {
 		// 例えば とある GPUコア で使用中のリソースを他の GPUコア が勝手に触れられないようにする処置だろうか
 		// この場合はレンダーターゲット( 描画対象のバックバッファ )にバリアを張っている
 		{
-			D3D12_RESOURCE_BARRIER	resourceBarrier = {};
-			resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;				// リソースの状態遷移に対して設置
-			resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-			resourceBarrier.Transition.pResource = mgr.rtv_buffer_[mgr.frame_index_].Get();		// リソースは描画ターゲット
-			resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;		// 遷移前はPresent
-			resourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;	// 遷移後は描画ターゲット
-			resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-			mgr.command_list_->ResourceBarrier(1, &resourceBarrier);
+			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+				mgr.rtv_buffer_[mgr.frame_index_].Get(),
+				D3D12_RESOURCE_STATE_PRESENT,			// 遷移前はPresent
+				D3D12_RESOURCE_STATE_RENDER_TARGET);	// 遷移後は描画ターゲット
+			mgr.command_list_->ResourceBarrier(1, &barrier);
 		}
 
-		// レンダーターゲットの設定
-		// カレントバッファを使用する
-		mgr.command_list_->OMSetRenderTargets(1, &mgr.rtv_handle_[mgr.frame_index_], FALSE, &mgr.dsv_handle_);
+		// オフスクリーンレンダリングを実装する際には変更する(サンプルを参考に)
+		{
+			// レンダーターゲットの設定
+			// カレントバッファを使用する
+			mgr.command_list_->OMSetRenderTargets(1, &mgr.rtv_handle_[mgr.frame_index_], FALSE, &mgr.dsv_handle_);
 
 
-		// 深度ステンシルビューとレンダーターゲットビューのクリア
-		const float	clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
-		mgr.command_list_->ClearDepthStencilView(mgr.dsv_handle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-		mgr.command_list_->ClearRenderTargetView(mgr.rtv_handle_[mgr.frame_index_], clearColor, 0, nullptr);
-
+			// 深度ステンシルビューとレンダーターゲットビューのクリア
+			const float	clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
+			mgr.command_list_->ClearDepthStencilView(mgr.dsv_handle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+			mgr.command_list_->ClearRenderTargetView(mgr.rtv_handle_[mgr.frame_index_], clearColor, 0, nullptr);
+		}
 
 		//==================================================
 
@@ -99,17 +103,13 @@ namespace eng {
 
 		//==================================================
 
-
 		// バックバッファの描画完了を待つためのバリアを設置
 		{
-			D3D12_RESOURCE_BARRIER	resourceBarrier = {};
-			resourceBarrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;					// リソースの状態遷移に対して設置
-			resourceBarrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-			resourceBarrier.Transition.pResource = mgr.rtv_buffer_[mgr.frame_index_].Get();			// リソースは描画ターゲット
-			resourceBarrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;	// 遷移前は描画ターゲット
-			resourceBarrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;			// 遷移後はPresent
-			resourceBarrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
-			mgr.command_list_->ResourceBarrier(1, &resourceBarrier);
+			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+				mgr.rtv_buffer_[mgr.frame_index_].Get(),
+				D3D12_RESOURCE_STATE_RENDER_TARGET,	// 遷移前は描画ターゲット
+				D3D12_RESOURCE_STATE_PRESENT);		// 遷移後はPresent
+			mgr.command_list_->ResourceBarrier(1, &barrier);
 		}
 
 		if (FAILED(mgr.command_list_->Close())) return;
