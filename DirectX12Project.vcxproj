@@ -99,6 +99,7 @@
     <ClCompile Include="game\component\sample_component.cpp" />
     <ClCompile Include="game\scene\sample_scene.cpp" />
     <ClCompile Include="library\bit_flag.cpp" />
+    <ClCompile Include="library\debug.cpp" />
     <ClCompile Include="library\fps_control.cpp" />
     <ClCompile Include="library\library.cpp" />
     <ClCompile Include="library\math.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="game\scene\sample_scene.h" />
     <ClInclude Include="library\bitmap.h" />
     <ClInclude Include="library\bit_flag.h" />
+    <ClInclude Include="library\debug.h" />
     <ClInclude Include="library\fps_control.h" />
     <ClInclude Include="library\library.h" />
     <ClInclude Include="library\link_linear.h" />

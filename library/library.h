@@ -16,6 +16,7 @@
 #include "time.h"
 #include "fps_control.h"
 #include "utility.h"
+#include "debug.h"
 
 
 namespace lib {

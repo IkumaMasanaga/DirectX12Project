@@ -129,6 +129,9 @@
     <ClCompile Include="engine\scene.cpp">
       <Filter>engine</Filter>
     </ClCompile>
+    <ClCompile Include="library\debug.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\dx12_manager.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="engine\transform.h">
       <Filter>engine</Filter>
+    </ClInclude>
+    <ClInclude Include="library\debug.h">
+      <Filter>library</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

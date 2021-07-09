@@ -27,7 +27,6 @@ bool SampleScene::initialize() {
 
 	obj1 = eng::GameObject::createCube("cube", desc, TEX_PATH);
 	obj1->transform_->local_position_.set(OFFSET_2, 0.0f, OFFSET_2);
-	obj1->transform_->local_scale_.set(1.0f, 2.0f, 1.0f);
 	obj1->addComponent<SampleComponent>();
 
 
@@ -72,7 +71,7 @@ bool SampleScene::initialize() {
 	obj1 = eng::GameObject::createCylinder("cylinder", desc, TEX_PATH);
 	obj1->transform_->local_position_.set(OFFSET_1, 0.0f, -OFFSET_2);
 	obj1->addComponent<SampleComponent>();
-
+	
 
 	camera_->getTransform()->local_position_.set(0.0f, 30.0f, -40.0f);
 	camera_->getTransform()->rotate(lib::Vector3::RIGHT, lib::Math::toRadian(45.0f));
@@ -82,7 +81,7 @@ bool SampleScene::initialize() {
 
 void SampleScene::lateUpdate() {
 
-
+	lib_DebugLog("delta_time = %f", lib::Time::getDeltaTime());
 
 }
 
