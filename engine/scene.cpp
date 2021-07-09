@@ -1,6 +1,8 @@
 #include "../system/d3dx12.h"
 
 #include "graphics/graphics_manager.h"
+#include "graphics/render_target_view.h"
+#include "graphics/depth_stencil_view.h"
 #include "graphics/pipeline_state.h"
 #include "scene.h"
 #include "object/game_object.h"
@@ -70,7 +72,7 @@ namespace eng {
 		// この場合はレンダーターゲット( 描画対象のバックバッファ )にバリアを張っている
 		{
 			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				mgr.rtv_buffer_[mgr.frame_index_].Get(),
+				mgr.rtv_[mgr.frame_index_]->buffer_.Get(),
 				D3D12_RESOURCE_STATE_PRESENT,			// 遷移前はPresent
 				D3D12_RESOURCE_STATE_RENDER_TARGET);	// 遷移後は描画ターゲット
 			mgr.command_list_->ResourceBarrier(1, &barrier);
@@ -80,13 +82,12 @@ namespace eng {
 		{
 			// レンダーターゲットの設定
 			// カレントバッファを使用する
-			mgr.command_list_->OMSetRenderTargets(1, &mgr.rtv_handle_[mgr.frame_index_], FALSE, &mgr.dsv_handle_);
+			mgr.command_list_->OMSetRenderTargets(1, &mgr.rtv_[mgr.frame_index_]->handle_.operator D3D12_CPU_DESCRIPTOR_HANDLE&(), FALSE, &mgr.dsv_->handle_.operator D3D12_CPU_DESCRIPTOR_HANDLE&());
 
 
 			// 深度ステンシルビューとレンダーターゲットビューのクリア
-			const float	clearColor[] = { 0.0f, 0.2f, 0.4f, 1.0f };
-			mgr.command_list_->ClearDepthStencilView(mgr.dsv_handle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-			mgr.command_list_->ClearRenderTargetView(mgr.rtv_handle_[mgr.frame_index_], clearColor, 0, nullptr);
+			mgr.command_list_->ClearDepthStencilView(mgr.dsv_->handle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+			mgr.command_list_->ClearRenderTargetView(mgr.rtv_[mgr.frame_index_]->handle_, mgr.rtv_[mgr.frame_index_]->clear_color_.c, 0, nullptr);
 		}
 
 		//==================================================
@@ -106,7 +107,7 @@ namespace eng {
 		// バックバッファの描画完了を待つためのバリアを設置
 		{
 			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				mgr.rtv_buffer_[mgr.frame_index_].Get(),
+				mgr.rtv_[mgr.frame_index_]->buffer_.Get(),
 				D3D12_RESOURCE_STATE_RENDER_TARGET,	// 遷移前は描画ターゲット
 				D3D12_RESOURCE_STATE_PRESENT);		// 遷移後はPresent
 			mgr.command_list_->ResourceBarrier(1, &barrier);

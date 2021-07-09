@@ -260,7 +260,7 @@
     <ClInclude Include="engine\graphics\depth_stencil_view.h">
       <Filter>engine\graphics</Filter>
     </ClInclude>
-    <ClInclude Include="engine\graphics\discriptor_manager.h">
+    <ClInclude Include="engine\graphics\descriptor_manager.h">
       <Filter>engine\graphics</Filter>
     </ClInclude>
     <ClInclude Include="engine\graphics\graphics_manager.h">
@@ -283,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="library\color.h">
       <Filter>library</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\graphics\descriptor_handle.h">
+      <Filter>engine\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

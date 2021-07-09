@@ -1,5 +1,8 @@
 #include "../../system/dx12_manager.h"
+#include "../../system/d3dx12.h"
 #include "../../library/bitmap.h"
+#include "graphics_manager.h"
+#include "descriptor_manager.h"
 #include "texture.h"
 
 
@@ -30,52 +33,23 @@ namespace eng {
 		free(p);
 		fclose(fp);
 
-		D3D12_HEAP_PROPERTIES heap_properties{};
-		D3D12_RESOURCE_DESC   resource_desc{};
-
 		//テクスチャ用のリソースの作成
-		heap_properties.Type = D3D12_HEAP_TYPE_CUSTOM;
-		heap_properties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;
-		heap_properties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;
-
-		resource_desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-		resource_desc.Width = tw;
-		resource_desc.Height = th;
-		resource_desc.DepthOrArraySize = 1;
-		resource_desc.MipLevels = 1;
-		resource_desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		resource_desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-		resource_desc.SampleDesc.Count = 1;
-		resource_desc.SampleDesc.Quality = 0;
+		D3D12_HEAP_PROPERTIES heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+		D3D12_RESOURCE_DESC   resource_desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_B8G8R8A8_UNORM, tw, th, 1, 1, 1, 0);
 		if (FAILED(mgr.device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&ptr->texture_)))) return nullptr;
 
-		//テクスチャ用のデスクリプタヒープの作成
-		D3D12_DESCRIPTOR_HEAP_DESC descriptor_heap_desc{};
-		descriptor_heap_desc.NumDescriptors = 1;
-		descriptor_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-		descriptor_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
-		descriptor_heap_desc.NodeMask = 0;
-		if (FAILED(mgr.device_->CreateDescriptorHeap(&descriptor_heap_desc, IID_PPV_ARGS(&ptr->descriptor_heap_)))) return nullptr;
-
 		//シェーダリソースビューの作成
-		D3D12_CPU_DESCRIPTOR_HANDLE handle_srv{};
-		D3D12_SHADER_RESOURCE_VIEW_DESC resourct_view_desc{};
+		D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
+		srv_desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srv_desc.Texture2D.MipLevels = 1;
+		srv_desc.Texture2D.MostDetailedMip = 0;
+		srv_desc.Texture2D.PlaneSlice = 0;
+		srv_desc.Texture2D.ResourceMinLODClamp = 0.0F;
+		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-		resourct_view_desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-		resourct_view_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		resourct_view_desc.Texture2D.MipLevels = 1;
-		resourct_view_desc.Texture2D.MostDetailedMip = 0;
-		resourct_view_desc.Texture2D.PlaneSlice = 0;
-		resourct_view_desc.Texture2D.ResourceMinLODClamp = 0.0F;
-		resourct_view_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-
-		handle_srv = ptr->descriptor_heap_->GetCPUDescriptorHandleForHeapStart();
-		mgr.device_->CreateShaderResourceView(ptr->texture_.Get(), &resourct_view_desc, handle_srv);
-
-		//resourct_view_desc.Format = DXGI_FORMAT_R32_FLOAT;
-		//handle_srv.ptr += device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-		//device->CreateShaderResourceView(sm, &resourct_view_desc, handle_srv);
-
+		ptr->handle_ = GraphicsManager::getInstance().srv_heap_->alloc();
+		mgr.device_->CreateShaderResourceView(ptr->texture_.Get(), &srv_desc, ptr->handle_);
 
 		//画像データの書き込み
 		D3D12_BOX box = { 0, 0, 0, (UINT)tw, (UINT)th, 1 };

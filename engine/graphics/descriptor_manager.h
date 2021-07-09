@@ -1,24 +1,12 @@
 #pragma once
 #include <wrl.h>
 #include "../../system/d3dx12.h"
+#include "descriptor_handle.h"
 
 
 namespace eng {
 
-	class DescriptorHandle final {
-	private:
-		D3D12_CPU_DESCRIPTOR_HANDLE handle_cpu_;
-		D3D12_GPU_DESCRIPTOR_HANDLE handle_gpu_;
-
-	public:
-		DescriptorHandle() : handle_cpu_(), handle_gpu_() {}
-		DescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle_cpu, D3D12_GPU_DESCRIPTOR_HANDLE handle_gpu) : handle_cpu_(handle_cpu), handle_gpu_(handle_gpu) {}
-		~DescriptorHandle() {}
-
-		operator D3D12_CPU_DESCRIPTOR_HANDLE() const { return handle_cpu_; }
-		operator D3D12_GPU_DESCRIPTOR_HANDLE() const { return handle_gpu_; }
-
-	};
+	// ïœçXÇ∑ÇÈâ¬î\ê´Ç†ÇË
 
 	class DescriptorManager final {
 	private:

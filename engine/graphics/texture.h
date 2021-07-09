@@ -2,6 +2,7 @@
 #include <wrl.h>
 #include <d3d12.h>
 #include "../../library/library.h"
+#include "descriptor_handle.h"
 
 
 namespace eng {
@@ -34,8 +35,8 @@ namespace eng {
 
 		UINT width_ = 0;	// 幅
 		UINT height_ = 0;	// 高さ
-		Microsoft::WRL::ComPtr<ID3D12Resource> texture_;				// テクスチャ
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptor_heap_;	// GPU上へのアドレスのようなもの のちにハンドルへ変更する
+		Microsoft::WRL::ComPtr<ID3D12Resource> texture_;	// テクスチャ
+		DescriptorHandle handle_;							// ハンドル
 
 		//====================================================================================================
 		// static関数

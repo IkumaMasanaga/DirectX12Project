@@ -1,5 +1,5 @@
 #include "../../system/dx12_manager.h"
-#include "discriptor_manager.h"
+#include "descriptor_manager.h"
 
 
 namespace eng {

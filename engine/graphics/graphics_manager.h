@@ -26,8 +26,10 @@ namespace eng {
 		//====================================================================================================
 		// static定数
 
-		// フレーム数
-		inline static constexpr UINT FRAME_COUNT = 2;
+		inline static constexpr UINT FRAME_COUNT = 2;				// フレーム数
+		inline static constexpr UINT DESCRIPTOR_RTV_NUM = 100;		// レンダーターゲットビュー
+		inline static constexpr UINT DESCRIPTOR_DSV_NUM = 100;		// 深度ステンシルビュー
+		inline static constexpr UINT DESCRIPTOR_SRV_NUM = 2048;		// シェーダーリソースビュー
 
 		//====================================================================================================
 		// メンバ関数
@@ -58,29 +60,17 @@ namespace eng {
 		std::shared_ptr<Shader> default_shader_ = nullptr;		// デフォルトのシェーダ
 		std::shared_ptr<Texture> default_texture_ = nullptr;	// デフォルトのテクスチャ
 
-		// レンダーターゲットビュー
-		// オフスクリーンレンダリングを使用し画面分割する際には複数必要？
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> rtv_heap_;
-		Microsoft::WRL::ComPtr<ID3D12Resource> rtv_buffer_[FRAME_COUNT] = {};
-		D3D12_CPU_DESCRIPTOR_HANDLE rtv_handle_[FRAME_COUNT] = {};
+		//--------------------------------------------------
+		// Layerに統合する？
+		
+		std::shared_ptr<RenderTargetView> rtv_[FRAME_COUNT] = {};	// レンダーターゲットビュー
+		std::shared_ptr<DepthStencilView> dsv_ = nullptr;			// 深度ステンシルビュー
 
-		// 深度ステンシルビュー
-		// オフスクリーンレンダリングを使用し画面分割する際には複数必要？
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> dsv_heap_;
-		Microsoft::WRL::ComPtr<ID3D12Resource> dsv_buffer_;
-		D3D12_CPU_DESCRIPTOR_HANDLE dsv_handle_ = {};
+		//--------------------------------------------------
 
-		//----------------------------------------------------------------------------------------------------
-
-		//// レンダーターゲットビュー
-		//std::shared_ptr<RenderTargetView> rtv_[FRAME_COUNT] = {};
-
-		//// 深度ステンシルビュー
-		//std::shared_ptr<DepthStencilView> dsv_ = nullptr;
-
-		//std::shared_ptr<DescriptorManager> rtv_heap_ = nullptr;	// レンダーターゲットビューのディスクリプタヒープ
-		//std::shared_ptr<DescriptorManager> dsv_heap_ = nullptr;	// 深度ステンシルビューのディスクリプタヒープ
-		//std::shared_ptr<DescriptorManager> srv_heap_ = nullptr;	// シェーダーリソースビューのディスクリプタヒープ
+		std::shared_ptr<DescriptorManager> rtv_heap_ = nullptr;	// レンダーターゲットビューのディスクリプタヒープ
+		std::shared_ptr<DescriptorManager> dsv_heap_ = nullptr;	// 深度ステンシルビューのディスクリプタヒープ
+		std::shared_ptr<DescriptorManager> srv_heap_ = nullptr;	// シェーダーリソースビューのディスクリプタヒープ
 
 		//====================================================================================================
 	};

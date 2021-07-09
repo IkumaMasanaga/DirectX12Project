@@ -1,7 +1,9 @@
 #include "../../system/dx12_manager.h"
 #include "../../system/window.h"
 #include "graphics_manager.h"
-#include "discriptor_manager.h"
+#include "descriptor_manager.h"
+#include "render_target_view.h"
+#include "depth_stencil_view.h"
 #include "pipeline_state.h"
 #include "shader.h"
 #include "texture.h"
@@ -51,79 +53,31 @@ namespace eng {
 			// ( dx11 でのRenderTargetView や ShaderResourceView 等もこれになる )
 
 			// DescriptorHeap が何のバッファなのかを表す型
-			D3D12_DESCRIPTOR_HEAP_DESC	rtv_heap_desc = {};
-
-			// フレームバッファとバックバッファの２つ
-			rtv_heap_desc.NumDescriptors = FRAME_COUNT;
-
-			// レンダーターゲットビュー
-			rtv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-
-			// シェーダの結果をリソースとして使用する場合は変更する？
-			rtv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-
-			if (FAILED(mgr.device_->CreateDescriptorHeap(&rtv_heap_desc, IID_PPV_ARGS(&rtv_heap_)))) return false;
-			UINT rtv_descriptor_size = mgr.device_->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
-
-			// フレームバッファとバックバッファのレンダーターゲットビューを作成
+			D3D12_DESCRIPTOR_HEAP_DESC	rtv_heap_desc = {
+				D3D12_DESCRIPTOR_HEAP_TYPE_RTV,		// レンダーターゲットビュー
+				DESCRIPTOR_RTV_NUM,					// 多めに確保しておく
+				D3D12_DESCRIPTOR_HEAP_FLAG_NONE,	// シェーダの結果をリソースとして使用する場合は変更する？
+				0
+			};
+			rtv_heap_ = std::make_shared<DescriptorManager>(rtv_heap_desc);
 			for (UINT i = 0; i < FRAME_COUNT; i++) {
-				rtv_handle_[i] = rtv_heap_->GetCPUDescriptorHandleForHeapStart();
-				rtv_handle_[i].ptr += rtv_descriptor_size * i;
-				if (FAILED(swap_chain_->GetBuffer(i, IID_PPV_ARGS(&rtv_buffer_[i])))) return false;
-				mgr.device_->CreateRenderTargetView(rtv_buffer_[i].Get(), nullptr, rtv_handle_[i]);
+				rtv_[i] = RenderTargetView::create(lib::Color(0.0f, 0.2f, 0.4f, 1.0f), sys::Window::WIDTH, sys::Window::HEIGHT);
+				if (FAILED(swap_chain_->GetBuffer(i, IID_PPV_ARGS(&rtv_[i]->buffer_)))) return FALSE;
+				mgr.device_->CreateRenderTargetView(rtv_[i]->buffer_.Get(), nullptr, rtv_[i]->handle_);
 			}
 		}
 
 		/* 深度ステンシルビューの作成 */ {
 
 			//深度バッファ用のデスクリプタヒープの作成
-			D3D12_DESCRIPTOR_HEAP_DESC dsv_heap_desc = {};
-			dsv_heap_desc.NumDescriptors = 1;
-			dsv_heap_desc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
-			dsv_heap_desc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-			dsv_heap_desc.NodeMask = 0;
-
-			if (FAILED(mgr.device_->CreateDescriptorHeap(&dsv_heap_desc, IID_PPV_ARGS(&dsv_heap_)))) return false;
-
-			//深度バッファの作成
-			D3D12_HEAP_PROPERTIES heap_properties = {};
-			D3D12_RESOURCE_DESC resource_desc = {};
-			D3D12_CLEAR_VALUE clear_value = {};
-
-			heap_properties.Type = D3D12_HEAP_TYPE_DEFAULT;
-			heap_properties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_UNKNOWN;
-			heap_properties.MemoryPoolPreference = D3D12_MEMORY_POOL_UNKNOWN;
-			heap_properties.CreationNodeMask = 0;
-			heap_properties.VisibleNodeMask = 0;
-
-			resource_desc.Dimension = D3D12_RESOURCE_DIMENSION_TEXTURE2D;
-			resource_desc.Width = sys::Window::WIDTH;
-			resource_desc.Height = sys::Window::HEIGHT;
-			resource_desc.DepthOrArraySize = 1;
-			resource_desc.MipLevels = 0;
-			resource_desc.Format = DXGI_FORMAT_R32_TYPELESS;
-			resource_desc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
-			resource_desc.SampleDesc.Count = 1;
-			resource_desc.SampleDesc.Quality = 0;
-			resource_desc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
-
-			clear_value.Format = DXGI_FORMAT_D32_FLOAT;
-			clear_value.DepthStencil.Depth = 1.0f;
-			clear_value.DepthStencil.Stencil = 0;
-
-			if (FAILED(mgr.device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &clear_value, IID_PPV_ARGS(&dsv_buffer_)))) return false;
-
-			//深度バッファのビューの作成
-			D3D12_DEPTH_STENCIL_VIEW_DESC dsv_desc{};
-
-			dsv_desc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
-			dsv_desc.Format = DXGI_FORMAT_D32_FLOAT;
-			dsv_desc.Texture2D.MipSlice = 0;
-			dsv_desc.Flags = D3D12_DSV_FLAG_NONE;
-
-			dsv_handle_ = dsv_heap_->GetCPUDescriptorHandleForHeapStart();
-
-			mgr.device_->CreateDepthStencilView(dsv_buffer_.Get(), &dsv_desc, dsv_handle_);
+			D3D12_DESCRIPTOR_HEAP_DESC dsv_heap_desc = {
+				D3D12_DESCRIPTOR_HEAP_TYPE_DSV,
+				DESCRIPTOR_DSV_NUM,					// 多めに確保しておく
+				D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
+				0
+			};
+			dsv_heap_ = std::make_shared<DescriptorManager>(dsv_heap_desc);
+			dsv_ = DepthStencilView::create(sys::Window::WIDTH, sys::Window::HEIGHT);
 		}
 
 		/* コマンドアロケーターの作成 */ {
@@ -311,6 +265,16 @@ namespace eng {
 		}
 
 		/* デフォルトテクスチャの作成 */ {
+
+			//テクスチャ用のデスクリプタヒープの作成
+			D3D12_DESCRIPTOR_HEAP_DESC srv_heap_desc = {
+				D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV,
+				DESCRIPTOR_SRV_NUM,							// 多めに確保しておく
+				D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
+				0
+			};
+			srv_heap_ = std::make_shared<DescriptorManager>(srv_heap_desc);
+
 			default_texture_ = Texture::loadFromFile("");
 			if (!default_texture_) return false;
 		}

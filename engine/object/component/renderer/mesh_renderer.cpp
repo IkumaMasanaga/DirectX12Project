@@ -1,4 +1,5 @@
 #include "../../../graphics/graphics_manager.h"
+#include "../../../graphics/descriptor_manager.h"
 #include "../../../graphics/pipeline_state.h"
 #include "../../../graphics/shader.h"
 #include "../../../graphics/texture.h"
@@ -36,8 +37,8 @@ namespace eng {
 
 			// テクスチャをシェーダのレジスタにセット
 			// テクスチャが設定されていない場合はデフォルトを設定するように変更する
-			mgr.command_list_->SetDescriptorHeaps(1, (*it)->material_->tex_diffuse_->descriptor_heap_.GetAddressOf());
-			mgr.command_list_->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->descriptor_heap_->GetGPUDescriptorHandleForHeapStart());
+			mgr.command_list_->SetDescriptorHeaps(1, mgr.srv_heap_->getHeap().GetAddressOf());	// ここじゃなくていい？
+			mgr.command_list_->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->handle_);
 
 
 			//--------------------------------------------------

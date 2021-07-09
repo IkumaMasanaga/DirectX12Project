@@ -122,7 +122,8 @@
   <ItemGroup>
     <ClInclude Include="engine\engine.h" />
     <ClInclude Include="engine\graphics\depth_stencil_view.h" />
-    <ClInclude Include="engine\graphics\discriptor_manager.h" />
+    <ClInclude Include="engine\graphics\descriptor_handle.h" />
+    <ClInclude Include="engine\graphics\descriptor_manager.h" />
     <ClInclude Include="engine\graphics\graphics_manager.h" />
     <ClInclude Include="engine\graphics\pipeline_state.h" />
     <ClInclude Include="engine\graphics\render_target_view.h" />
