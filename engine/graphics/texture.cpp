@@ -48,7 +48,7 @@ namespace eng {
 		srv_desc.Texture2D.ResourceMinLODClamp = 0.0F;
 		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-		ptr->handle_ = GraphicsManager::getInstance().srv_heap_->alloc();
+		ptr->handle_ = GraphicsManager::getInstance().getSrvHeap()->alloc();
 		mgr.device_->CreateShaderResourceView(ptr->texture_.Get(), &srv_desc, ptr->handle_.getCpuHandle());
 
 		//画像データの書き込み
@@ -66,6 +66,35 @@ namespace eng {
 	Texture::s_ptr Texture::loadFromFile(const std::string& file_path) {
 		std::string path = (file_path.empty()) ? "engine/resources/default_texture.bmp" : file_path;
 		return regist_map_.load<std::string>(path, path);
+	}
+
+	Texture::s_ptr Texture::createEmpty(const uint32_t width, const uint32_t height) {
+		Texture::s_ptr ptr = Texture::createShared<Texture>();
+
+		sys::Dx12Manager& mgr = sys::Dx12Manager::getInstance();
+
+		//テクスチャ用のリソースの作成
+		D3D12_HEAP_PROPERTIES heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0);
+		D3D12_RESOURCE_DESC   resource_desc = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_B8G8R8A8_UNORM, width, height, 1, 1, 1, 0);
+		if (FAILED(mgr.device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&ptr->texture_)))) return nullptr;
+
+		//シェーダリソースビューの作成
+		D3D12_SHADER_RESOURCE_VIEW_DESC srv_desc = {};
+		srv_desc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		srv_desc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srv_desc.Texture2D.MipLevels = 1;
+		srv_desc.Texture2D.MostDetailedMip = 0;
+		srv_desc.Texture2D.PlaneSlice = 0;
+		srv_desc.Texture2D.ResourceMinLODClamp = 0.0F;
+		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+
+		ptr->handle_ = GraphicsManager::getInstance().getSrvHeap()->alloc();
+		mgr.device_->CreateShaderResourceView(ptr->texture_.Get(), &srv_desc, ptr->handle_.getCpuHandle());
+
+		ptr->width_ = width;
+		ptr->height_ = height;
+
+		return ptr;
 	}
 
 }

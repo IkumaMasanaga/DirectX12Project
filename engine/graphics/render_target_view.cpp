@@ -7,7 +7,7 @@
 namespace eng {
 
 	RenderTargetView::~RenderTargetView() {
-		GraphicsManager::getInstance().rtv_heap_->free(handle_);
+		GraphicsManager::getInstance().getRtvHeap()->free(handle_);
 	}
 
 	RenderTargetView::s_ptr RenderTargetView::create(const lib::Color& clear_color, const LONG width, const LONG height) {
@@ -23,7 +23,7 @@ namespace eng {
 		D3D12_HEAP_PROPERTIES heap_properties = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
 		sys::Dx12Manager& mgr = sys::Dx12Manager::getInstance();
 		if (FAILED(mgr.device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &color_tex_desc, D3D12_RESOURCE_STATE_RENDER_TARGET, &clear_value, IID_PPV_ARGS(&ptr->buffer_)))) return nullptr;
-		ptr->handle_ = GraphicsManager::getInstance().rtv_heap_->alloc();
+		ptr->handle_ = GraphicsManager::getInstance().getRtvHeap()->alloc();
 		mgr.device_->CreateRenderTargetView(ptr->buffer_.Get(), nullptr, ptr->handle_.getCpuHandle());
 		ptr->clear_color_ = clear_color;
 

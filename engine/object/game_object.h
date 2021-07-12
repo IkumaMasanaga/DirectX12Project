@@ -13,6 +13,7 @@ namespace eng {
 	class GameObject final : public Object {
 		// 各種privateメンバにアクセスするため
 		friend class Scene;
+		friend class Layer;
 		// 基底クラスで生成するため
 		friend class lib::SmartFactory;
 	public:

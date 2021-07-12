@@ -10,6 +10,8 @@
 #include "object/component/renderer/renderer.h"
 
 
+using namespace Microsoft::WRL;
+
 namespace eng {
 
 	bool Scene::onCreated() {
@@ -55,40 +57,13 @@ namespace eng {
 	void Scene::render() {
 
 		GraphicsManager& mgr = GraphicsManager::getInstance();
+		ComPtr<ID3D12GraphicsCommandList> com_list = mgr.getCommandList();
 
-		if (FAILED(mgr.command_allocator_->Reset())) return;
-		if (FAILED(mgr.command_list_->Reset(mgr.command_allocator_.Get(), mgr.default_pso_->getObject().Get()))) return;
-
-		// これどこに持っていく？
-		//----------------------------------------------------------------------------------------------------
-		mgr.command_list_->RSSetViewports(1, &sys::Window::VIEWPORT);
-		mgr.command_list_->RSSetScissorRects(1, &sys::Window::SCISSOR_RECT);
-		//----------------------------------------------------------------------------------------------------
-
-		// 【 バックバッファが描画ターゲットとして使用できるようになるまで待つ 】
-		// 複数個の GPUコアが 並列作業をする dx12 では
-		// GPUコア で使用されるリソースにバリアを張るらしい
-		// 例えば とある GPUコア で使用中のリソースを他の GPUコア が勝手に触れられないようにする処置だろうか
-		// この場合はレンダーターゲット( 描画対象のバックバッファ )にバリアを張っている
-		{
-			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				mgr.rtv_[mgr.frame_index_]->getBuffer().Get(),
-				D3D12_RESOURCE_STATE_PRESENT,			// 遷移前はPresent
-				D3D12_RESOURCE_STATE_RENDER_TARGET);	// 遷移後は描画ターゲット
-			mgr.command_list_->ResourceBarrier(1, &barrier);
-		}
-
-		// オフスクリーンレンダリングを実装する際には変更する(サンプルを参考に)
-		{
-			// レンダーターゲットの設定
-			// カレントバッファを使用する
-			mgr.command_list_->OMSetRenderTargets(1, &mgr.rtv_[mgr.frame_index_]->getHandle().getCpuHandle(), FALSE, &mgr.dsv_->getHandle().getCpuHandle());
+		if (FAILED(mgr.getCommandAllocator()->Reset())) return;
+		if (FAILED(mgr.getCommandList()->Reset(mgr.getCommandAllocator().Get(), mgr.getDefaultPso()->getObject().Get()))) return;
 
 
-			// 深度ステンシルビューとレンダーターゲットビューのクリア
-			mgr.command_list_->ClearDepthStencilView(mgr.dsv_->getHandle().getCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-			mgr.command_list_->ClearRenderTargetView(mgr.rtv_[mgr.frame_index_]->getHandle().getCpuHandle(), mgr.rtv_[mgr.frame_index_]->getClearColor().c, 0, nullptr);
-		}
+		mgr.beforeRender(sys::Window::VIEWPORT, sys::Window::SCISSOR_RECT, mgr.getRtv(), mgr.getDsv());
 
 		//==================================================
 
@@ -104,23 +79,9 @@ namespace eng {
 
 		//==================================================
 
-		// バックバッファの描画完了を待つためのバリアを設置
-		{
-			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				mgr.rtv_[mgr.frame_index_]->getBuffer().Get(),
-				D3D12_RESOURCE_STATE_RENDER_TARGET,	// 遷移前は描画ターゲット
-				D3D12_RESOURCE_STATE_PRESENT);		// 遷移後はPresent
-			mgr.command_list_->ResourceBarrier(1, &barrier);
-		}
+		mgr.afterRender(mgr.getRtv());
 
-		if (FAILED(mgr.command_list_->Close())) return;
-
-		// コマンドリストを実行
-		ID3D12CommandList* ppCommandLists[] = { mgr.command_list_.Get() };
-		mgr.command_queue_->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-
-		// フレームを最終出力
-		if (FAILED(mgr.swap_chain_->Present(1, 0))) return;
+		mgr.executeCommandList();
 
 	}
 

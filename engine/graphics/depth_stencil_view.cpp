@@ -7,7 +7,7 @@
 namespace eng {
 
 	DepthStencilView::~DepthStencilView() {
-		GraphicsManager::getInstance().dsv_heap_->free(handle_);
+		GraphicsManager::getInstance().getDsvHeap()->free(handle_);
 	}
 
 	DepthStencilView::s_ptr DepthStencilView::create(const LONG width, const LONG height) {
@@ -49,7 +49,7 @@ namespace eng {
 		dsv_desc.Texture2D.MipSlice = 0;
 		dsv_desc.Flags = D3D12_DSV_FLAG_NONE;
 
-		ptr->handle_ = GraphicsManager::getInstance().dsv_heap_->alloc();
+		ptr->handle_ = GraphicsManager::getInstance().getDsvHeap()->alloc();
 		mgr.device_->CreateDepthStencilView(ptr->buffer_.Get(), &dsv_desc, ptr->handle_.getCpuHandle());
 
 		return ptr;

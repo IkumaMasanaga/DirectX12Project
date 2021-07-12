@@ -310,4 +310,62 @@ namespace eng {
 		return true;
 	}
 
+	void GraphicsManager::beforeRender(const D3D12_VIEWPORT& viewport, const D3D12_RECT& scissor_rect, const std::shared_ptr<RenderTargetView>& rtv, const std::shared_ptr<DepthStencilView>& dsv) {
+
+		command_list_->RSSetViewports(1, &viewport);
+		command_list_->RSSetScissorRects(1, &scissor_rect);
+
+		// 【 バックバッファが描画ターゲットとして使用できるようになるまで待つ 】
+		// 複数個の GPUコアが 並列作業をする dx12 では
+		// GPUコア で使用されるリソースにバリアを張るらしい
+		// 例えば とある GPUコア で使用中のリソースを他の GPUコア が勝手に触れられないようにする処置だろうか
+		// この場合はレンダーターゲット( 描画対象のバックバッファ )にバリアを張っている
+		{
+			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+				rtv->getBuffer().Get(),
+				D3D12_RESOURCE_STATE_PRESENT,			// 遷移前はPresent
+				D3D12_RESOURCE_STATE_RENDER_TARGET);	// 遷移後は描画ターゲット
+			command_list_->ResourceBarrier(1, &barrier);
+		}
+
+		// オフスクリーンレンダリングを実装する際には変更する(サンプルを参考に)
+		{
+			// レンダーターゲットの設定
+			// カレントバッファを使用する
+			command_list_->OMSetRenderTargets(1, &rtv->getHandle().getCpuHandle(), FALSE, &dsv->getHandle().getCpuHandle());
+
+			// 深度ステンシルビューとレンダーターゲットビューのクリア
+			command_list_->ClearDepthStencilView(dsv->getHandle().getCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+			command_list_->ClearRenderTargetView(rtv->getHandle().getCpuHandle(), rtv->getClearColor().c, 0, nullptr);
+		}
+
+	}
+
+	void GraphicsManager::afterRender(const std::shared_ptr<RenderTargetView>& rtv) {
+
+		// バックバッファの描画完了を待つためのバリアを設置
+		{
+			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+				rtv->getBuffer().Get(),
+				D3D12_RESOURCE_STATE_RENDER_TARGET,	// 遷移前は描画ターゲット
+				D3D12_RESOURCE_STATE_PRESENT);		// 遷移後はPresent
+			command_list_->ResourceBarrier(1, &barrier);
+		}
+
+	}
+
+	bool GraphicsManager::executeCommandList() {
+
+		if (FAILED(command_list_->Close())) return false;
+
+		// コマンドリストを実行
+		ID3D12CommandList* ppCommandLists[] = { command_list_.Get() };
+		command_queue_->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
+
+		// フレームを最終出力
+		if (FAILED(swap_chain_->Present(1, 0))) return false;
+
+		return true;
+	}
+
 }

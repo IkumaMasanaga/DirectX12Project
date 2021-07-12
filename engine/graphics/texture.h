@@ -20,8 +20,8 @@ namespace eng {
 		//====================================================================================================
 		// メンバ変数
 
-		UINT width_ = 0;					// 幅
-		UINT height_ = 0;					// 高さ
+		uint32_t width_ = 0;				// 幅
+		uint32_t height_ = 0;				// 高さ
 		ComPtr<ID3D12Resource> texture_;	// テクスチャ
 		DescriptorHandle handle_;			// ハンドル
 
@@ -55,6 +55,9 @@ namespace eng {
 
 		// ロード
 		static Texture::s_ptr loadFromFile(const std::string& file_path);
+
+		// 空の描画テクスチャの生成
+		static Texture::s_ptr createEmpty(const uint32_t width, const uint32_t height);
 
 		//====================================================================================================
 	};

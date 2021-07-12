@@ -29,11 +29,6 @@ namespace eng {
 
 	private:
 		//====================================================================================================
-		// static変数
-
-		inline static lib::SharedFlyweightMap<LPCWSTR, Shader> regist_map_;	// 登録マップ
-
-		//====================================================================================================
 		// メンバ変数
 
 		D3D12_INPUT_ELEMENT_DESC* input_element_desc_ = nullptr;	// 頂点入力レイアウト
@@ -41,6 +36,11 @@ namespace eng {
 		ComPtr<ID3DBlob> vertex_shader_;							// 頂点シェーダー
 		ComPtr<ID3DBlob> pixel_shader_;								// ピクセルシェーダー
 		ComPtr<ID3D12RootSignature> root_signature_;				// ルートシグネチャ
+
+		//====================================================================================================
+		// static変数
+
+		inline static lib::SharedFlyweightMap<LPCWSTR, Shader> regist_map_;	// 登録マップ
 
 		//====================================================================================================
 		// static関数

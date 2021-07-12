@@ -16,6 +16,7 @@ namespace eng {
 	void MeshRenderer::render(std::shared_ptr<Camera> camera) {
 
 		GraphicsManager& mgr = GraphicsManager::getInstance();
+		ComPtr<ID3D12GraphicsCommandList> com_list = mgr.getCommandList();
 
 		// カメラの設定
 		lib::Matrix4x4 view_projection = camera->getViewMatrix4x4() * camera->getProjectionMatrix4x4();
@@ -32,13 +33,13 @@ namespace eng {
 			}
 
 			// ルートシグネチャとPSOの設定
-			mgr.command_list_->SetGraphicsRootSignature((*it)->pso_->getShader()->getRootSignature().Get());
-			mgr.command_list_->SetPipelineState((*it)->pso_->getObject().Get());
+			com_list->SetGraphicsRootSignature((*it)->pso_->getShader()->getRootSignature().Get());
+			com_list->SetPipelineState((*it)->pso_->getObject().Get());
 
 			// テクスチャをシェーダのレジスタにセット
 			// テクスチャが設定されていない場合はデフォルトを設定するように変更する
-			mgr.command_list_->SetDescriptorHeaps(1, mgr.srv_heap_->getHeap().GetAddressOf());	// ここじゃなくていい？
-			mgr.command_list_->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->getHandle().getGpuHandle());
+			com_list->SetDescriptorHeaps(1, mgr.getSrvHeap()->getHeap().GetAddressOf());	// ここじゃなくていい？
+			com_list->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->getHandle().getGpuHandle());
 
 
 			//--------------------------------------------------
@@ -65,13 +66,13 @@ namespace eng {
 			index_view.SizeInBytes = sizeof(uint32_t) * (*it)->shape_->getIndexNum();
 			index_view.Format = DXGI_FORMAT_R32_UINT;
 
-			mgr.command_list_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-			mgr.command_list_->IASetVertexBuffers(0, 1, &vertex_view);
-			mgr.command_list_->IASetIndexBuffer(&index_view);
+			com_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			com_list->IASetVertexBuffers(0, 1, &vertex_view);
+			com_list->IASetIndexBuffer(&index_view);
 
 
 			// 描画
-			mgr.command_list_->DrawIndexedInstanced((*it)->shape_->getIndexNum(), 1, 0, 0, 0);
+			com_list->DrawIndexedInstanced((*it)->shape_->getIndexNum(), 1, 0, 0, 0);
 
 			++it;
 		}
