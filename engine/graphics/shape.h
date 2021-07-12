@@ -15,6 +15,9 @@ namespace eng {
 	class Shape final : public lib::SmartFactory {
 		// 登録するため
 		friend class lib::SharedFlyweightMap<std::string, Shape>;
+	private:
+		template<class T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
 	public:
 		using s_ptr = std::shared_ptr<Shape>;
 		using w_ptr = std::weak_ptr<Shape>;
@@ -40,6 +43,14 @@ namespace eng {
 		};
 
 	private:
+		//====================================================================================================
+		// メンバ変数
+
+		ComPtr<ID3D12Resource> vbo_;	// 頂点バッファ
+		ComPtr<ID3D12Resource> ibo_;	// インデックスバッファ
+		int vertex_num_ = 0;			// 頂点数
+		int index_num_ = 0;				// インデックス数
+
 		//====================================================================================================
 		// static変数
 
@@ -72,12 +83,13 @@ namespace eng {
 		~Shape() {}
 
 		//====================================================================================================
-		// メンバ変数
+		// メンバ関数
 
-		Microsoft::WRL::ComPtr<ID3D12Resource> vbo_;	// 頂点バッファ
-		Microsoft::WRL::ComPtr<ID3D12Resource> ibo_;	// インデックスバッファ
-		int vertex_num_ = 0;	// 頂点数
-		int index_num_ = 0;		// インデックス数
+		// ゲッター
+		inline ComPtr<ID3D12Resource> const getVertexBuffer() { return vbo_; }
+		inline ComPtr<ID3D12Resource> const getIndexBuffer() { return ibo_; }
+		inline int getVertexNum() const { return vertex_num_; }
+		inline int getIndexNum() const { return index_num_; }
 
 		//====================================================================================================
 		// static関数

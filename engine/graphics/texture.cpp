@@ -49,7 +49,7 @@ namespace eng {
 		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
 		ptr->handle_ = GraphicsManager::getInstance().srv_heap_->alloc();
-		mgr.device_->CreateShaderResourceView(ptr->texture_.Get(), &srv_desc, ptr->handle_);
+		mgr.device_->CreateShaderResourceView(ptr->texture_.Get(), &srv_desc, ptr->handle_.getCpuHandle());
 
 		//‰æ‘œƒf[ƒ^‚Ì‘‚«‚İ
 		D3D12_BOX box = { 0, 0, 0, (UINT)tw, (UINT)th, 1 };

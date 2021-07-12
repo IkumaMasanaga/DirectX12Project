@@ -24,7 +24,7 @@ namespace eng {
 		sys::Dx12Manager& mgr = sys::Dx12Manager::getInstance();
 		if (FAILED(mgr.device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &color_tex_desc, D3D12_RESOURCE_STATE_RENDER_TARGET, &clear_value, IID_PPV_ARGS(&ptr->buffer_)))) return nullptr;
 		ptr->handle_ = GraphicsManager::getInstance().rtv_heap_->alloc();
-		mgr.device_->CreateRenderTargetView(ptr->buffer_.Get(), nullptr, ptr->handle_);
+		mgr.device_->CreateRenderTargetView(ptr->buffer_.Get(), nullptr, ptr->handle_.getCpuHandle());
 		ptr->clear_color_ = clear_color;
 
 		return ptr;

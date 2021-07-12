@@ -21,6 +21,9 @@ namespace eng {
 		// initialize, finalizeを呼ぶため
 		friend class sys::System;
 	private:
+		template<class T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
+	private:
 		GraphicsManager() {}
 
 		//====================================================================================================
@@ -50,11 +53,11 @@ namespace eng {
 		//====================================================================================================
 		// メンバ変数
 
-		UINT frame_index_ = 0;												// 現在の描画フレーム
-		Microsoft::WRL::ComPtr<ID3D12CommandQueue> command_queue_;			// コマンドキュー
-		Microsoft::WRL::ComPtr<ID3D12CommandAllocator> command_allocator_;	// コマンドアロケーター
-		Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> command_list_;	// コマンドリスト
-		Microsoft::WRL::ComPtr<IDXGISwapChain3> swap_chain_;				// スワップチェイン
+		UINT frame_index_ = 0;								// 現在の描画フレーム
+		ComPtr<ID3D12CommandQueue> command_queue_;			// コマンドキュー
+		ComPtr<ID3D12CommandAllocator> command_allocator_;	// コマンドアロケーター
+		ComPtr<ID3D12GraphicsCommandList> command_list_;	// コマンドリスト
+		ComPtr<IDXGISwapChain3> swap_chain_;				// スワップチェイン
 
 		std::shared_ptr<PipelineState> default_pso_ = nullptr;	// デフォルトのPSO
 		std::shared_ptr<Shader> default_shader_ = nullptr;		// デフォルトのシェーダ

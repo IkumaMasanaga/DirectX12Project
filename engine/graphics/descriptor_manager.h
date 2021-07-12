@@ -10,7 +10,10 @@ namespace eng {
 
 	class DescriptorManager final {
 	private:
-		Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> heap_;
+		template<class T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
+	private:
+		ComPtr<ID3D12DescriptorHeap> heap_;
 		CD3DX12_CPU_DESCRIPTOR_HANDLE handle_cpu_;
 		CD3DX12_GPU_DESCRIPTOR_HANDLE handle_gpu_;
 		UINT index_ = 0;
@@ -20,7 +23,7 @@ namespace eng {
 		DescriptorManager(const D3D12_DESCRIPTOR_HEAP_DESC& desc);
 		~DescriptorManager() {}
 		
-		inline Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> getHeap() const { return heap_; }
+		inline ComPtr<ID3D12DescriptorHeap> getHeap() const { return heap_; }
 
 		inline DescriptorHandle alloc() {
 			if (!free_list_.empty()) {

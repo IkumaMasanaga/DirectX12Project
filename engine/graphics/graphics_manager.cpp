@@ -9,8 +9,6 @@
 #include "texture.h"
 
 
-using namespace Microsoft::WRL;
-
 namespace eng {
 
 	bool GraphicsManager::initialize() {
@@ -62,8 +60,8 @@ namespace eng {
 			rtv_heap_ = std::make_shared<DescriptorManager>(rtv_heap_desc);
 			for (UINT i = 0; i < FRAME_COUNT; i++) {
 				rtv_[i] = RenderTargetView::create(lib::Color(0.0f, 0.2f, 0.4f, 1.0f), sys::Window::WIDTH, sys::Window::HEIGHT);
-				if (FAILED(swap_chain_->GetBuffer(i, IID_PPV_ARGS(&rtv_[i]->buffer_)))) return FALSE;
-				mgr.device_->CreateRenderTargetView(rtv_[i]->buffer_.Get(), nullptr, rtv_[i]->handle_);
+				if (FAILED(swap_chain_->GetBuffer(i, IID_PPV_ARGS(&rtv_[i]->getBuffer())))) return FALSE;
+				mgr.device_->CreateRenderTargetView(rtv_[i]->getBuffer().Get(), nullptr, rtv_[i]->getHandle().getCpuHandle());
 			}
 		}
 
@@ -185,14 +183,14 @@ namespace eng {
 
 			// グラフィックスパイプラインの状態オブジェクトを作成
 				//シェーダーの設定
-			pso_desc.pso_desc_.VS.pShaderBytecode = pso_desc.shader_->vertex_shader_->GetBufferPointer();
-			pso_desc.pso_desc_.VS.BytecodeLength = pso_desc.shader_->vertex_shader_->GetBufferSize();
-			pso_desc.pso_desc_.PS.pShaderBytecode = pso_desc.shader_->pixel_shader_->GetBufferPointer();
-			pso_desc.pso_desc_.PS.BytecodeLength = pso_desc.shader_->pixel_shader_->GetBufferSize();
+			pso_desc.pso_desc_.VS.pShaderBytecode = default_shader_->getVertexShader()->GetBufferPointer();
+			pso_desc.pso_desc_.VS.BytecodeLength = default_shader_->getVertexShader()->GetBufferSize();
+			pso_desc.pso_desc_.PS.pShaderBytecode = default_shader_->getPixelShader()->GetBufferPointer();
+			pso_desc.pso_desc_.PS.BytecodeLength = default_shader_->getPixelShader()->GetBufferSize();
 
 			//インプットレイアウトの設定
-			pso_desc.pso_desc_.InputLayout.pInputElementDescs = pso_desc.shader_->input_element_desc_;
-			pso_desc.pso_desc_.InputLayout.NumElements = pso_desc.shader_->input_element_size_;
+			pso_desc.pso_desc_.InputLayout.pInputElementDescs = default_shader_->getInputElementDesc();
+			pso_desc.pso_desc_.InputLayout.NumElements = default_shader_->getInputElementSize();
 
 			//サンプル系の設定
 			pso_desc.pso_desc_.SampleDesc.Count = 1;
@@ -207,7 +205,7 @@ namespace eng {
 			pso_desc.pso_desc_.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
 			//ルートシグネチャ
-			pso_desc.pso_desc_.pRootSignature = pso_desc.shader_->root_signature_.Get();
+			pso_desc.pso_desc_.pRootSignature = default_shader_->getRootSignature().Get();
 
 			//ラスタライザステートの設定
 			pso_desc.pso_desc_.RasterizerState.CullMode = D3D12_CULL_MODE_NONE;
@@ -281,7 +279,7 @@ namespace eng {
 
 		/* コマンドリストの作成 */ {
 
-			if (FAILED(mgr.device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, command_allocator_.Get(), default_pso_->pso_.Get(), IID_PPV_ARGS(&command_list_)))) return false;
+			if (FAILED(mgr.device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, command_allocator_.Get(), default_pso_->getObject().Get(), IID_PPV_ARGS(&command_list_)))) return false;
 			if (FAILED(command_list_->Close())) return false;
 		}
 

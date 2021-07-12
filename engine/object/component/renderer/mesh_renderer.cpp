@@ -32,13 +32,13 @@ namespace eng {
 			}
 
 			// ルートシグネチャとPSOの設定
-			mgr.command_list_->SetGraphicsRootSignature((*it)->pso_->shader_->root_signature_.Get());
-			mgr.command_list_->SetPipelineState((*it)->pso_->pso_.Get());
+			mgr.command_list_->SetGraphicsRootSignature((*it)->pso_->getShader()->getRootSignature().Get());
+			mgr.command_list_->SetPipelineState((*it)->pso_->getObject().Get());
 
 			// テクスチャをシェーダのレジスタにセット
 			// テクスチャが設定されていない場合はデフォルトを設定するように変更する
 			mgr.command_list_->SetDescriptorHeaps(1, mgr.srv_heap_->getHeap().GetAddressOf());	// ここじゃなくていい？
-			mgr.command_list_->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->handle_);
+			mgr.command_list_->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->getHandle().getGpuHandle());
 
 
 			//--------------------------------------------------
@@ -50,19 +50,19 @@ namespace eng {
 			// 1.定数バッファ
 			// 2.ワールド行列
 			// 3.ビュープロジェクション行列
-			(*it)->pso_->shader_->setting_func_((*it)->cbv_.Get(), &m, &view_projection);
+			(*it)->pso_->getShader()->setting_func_((*it)->cbv_.Get(), &m, &view_projection);
 
 			//--------------------------------------------------
 
 			// インデックスを使用し、トライアングルリストを描画
 			D3D12_VERTEX_BUFFER_VIEW vertex_view{};
-			vertex_view.BufferLocation = (*it)->shape_->vbo_->GetGPUVirtualAddress();
+			vertex_view.BufferLocation = (*it)->shape_->getVertexBuffer()->GetGPUVirtualAddress();
 			vertex_view.StrideInBytes = sizeof(Vertex3D);
-			vertex_view.SizeInBytes = sizeof(Vertex3D) * (*it)->shape_->vertex_num_;
+			vertex_view.SizeInBytes = sizeof(Vertex3D) * (*it)->shape_->getVertexNum();
 
 			D3D12_INDEX_BUFFER_VIEW index_view{};
-			index_view.BufferLocation = (*it)->shape_->ibo_->GetGPUVirtualAddress();
-			index_view.SizeInBytes = sizeof(uint32_t) * (*it)->shape_->index_num_;
+			index_view.BufferLocation = (*it)->shape_->getIndexBuffer()->GetGPUVirtualAddress();
+			index_view.SizeInBytes = sizeof(uint32_t) * (*it)->shape_->getIndexNum();
 			index_view.Format = DXGI_FORMAT_R32_UINT;
 
 			mgr.command_list_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -71,7 +71,7 @@ namespace eng {
 
 
 			// 描画
-			mgr.command_list_->DrawIndexedInstanced((*it)->shape_->index_num_, 1, 0, 0, 0);
+			mgr.command_list_->DrawIndexedInstanced((*it)->shape_->getIndexNum(), 1, 0, 0, 0);
 
 			++it;
 		}

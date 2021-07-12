@@ -10,6 +10,9 @@ namespace eng {
 
 	class PipelineState final : public lib::SmartFactory {
 		friend class lib::SharedFlyweightMap<std::string, PipelineState>;
+	private:
+		template<class T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
 	public:
 		using s_ptr = std::shared_ptr<PipelineState>;
 		using w_ptr = std::weak_ptr<PipelineState>;
@@ -27,6 +30,12 @@ namespace eng {
 		inline static lib::SharedFlyweightMap<std::string, PipelineState> regist_map_;	// 登録マップ
 
 		//====================================================================================================
+		// メンバ変数
+
+		ComPtr<ID3D12PipelineState> object_;		// パイプラインステートオブジェクト
+		std::shared_ptr<Shader> shader_ = nullptr;	// シェーダー
+
+		//====================================================================================================
 		// static関数
 
 		// SharedFlyweightMapでの生成
@@ -38,10 +47,10 @@ namespace eng {
 		~PipelineState() {}
 
 		//====================================================================================================
-		// メンバ変数
-		
-		Microsoft::WRL::ComPtr<ID3D12PipelineState> pso_;	// パイプラインステートオブジェクト
-		std::shared_ptr<Shader> shader_ = nullptr;			// シェーダー
+		// メンバ関数
+
+		inline ComPtr<ID3D12PipelineState> getObject() { return object_; }
+		inline std::shared_ptr<Shader> getShader() { return shader_; }
 
 		//====================================================================================================
 		// static関数

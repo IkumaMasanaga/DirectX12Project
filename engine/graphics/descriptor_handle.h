@@ -16,8 +16,8 @@ namespace eng {
 		DescriptorHandle(D3D12_CPU_DESCRIPTOR_HANDLE handle_cpu, D3D12_GPU_DESCRIPTOR_HANDLE handle_gpu) : handle_cpu_(handle_cpu), handle_gpu_(handle_gpu) {}
 		~DescriptorHandle() {}
 
-		inline operator D3D12_CPU_DESCRIPTOR_HANDLE&() { return handle_cpu_; }
-		inline operator D3D12_GPU_DESCRIPTOR_HANDLE&() { return handle_gpu_; }
+		inline D3D12_CPU_DESCRIPTOR_HANDLE& getCpuHandle() { return handle_cpu_; }
+		inline D3D12_GPU_DESCRIPTOR_HANDLE& getGpuHandle() { return handle_gpu_; }
 
 	};
 

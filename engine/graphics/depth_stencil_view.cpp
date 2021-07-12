@@ -50,7 +50,7 @@ namespace eng {
 		dsv_desc.Flags = D3D12_DSV_FLAG_NONE;
 
 		ptr->handle_ = GraphicsManager::getInstance().dsv_heap_->alloc();
-		mgr.device_->CreateDepthStencilView(ptr->buffer_.Get(), &dsv_desc, ptr->handle_);
+		mgr.device_->CreateDepthStencilView(ptr->buffer_.Get(), &dsv_desc, ptr->handle_.getCpuHandle());
 
 		return ptr;
 	}

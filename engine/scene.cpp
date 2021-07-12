@@ -57,7 +57,7 @@ namespace eng {
 		GraphicsManager& mgr = GraphicsManager::getInstance();
 
 		if (FAILED(mgr.command_allocator_->Reset())) return;
-		if (FAILED(mgr.command_list_->Reset(mgr.command_allocator_.Get(), mgr.default_pso_->pso_.Get()))) return;
+		if (FAILED(mgr.command_list_->Reset(mgr.command_allocator_.Get(), mgr.default_pso_->getObject().Get()))) return;
 
 		// これどこに持っていく？
 		//----------------------------------------------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace eng {
 		// この場合はレンダーターゲット( 描画対象のバックバッファ )にバリアを張っている
 		{
 			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				mgr.rtv_[mgr.frame_index_]->buffer_.Get(),
+				mgr.rtv_[mgr.frame_index_]->getBuffer().Get(),
 				D3D12_RESOURCE_STATE_PRESENT,			// 遷移前はPresent
 				D3D12_RESOURCE_STATE_RENDER_TARGET);	// 遷移後は描画ターゲット
 			mgr.command_list_->ResourceBarrier(1, &barrier);
@@ -82,12 +82,12 @@ namespace eng {
 		{
 			// レンダーターゲットの設定
 			// カレントバッファを使用する
-			mgr.command_list_->OMSetRenderTargets(1, &mgr.rtv_[mgr.frame_index_]->handle_.operator D3D12_CPU_DESCRIPTOR_HANDLE&(), FALSE, &mgr.dsv_->handle_.operator D3D12_CPU_DESCRIPTOR_HANDLE&());
+			mgr.command_list_->OMSetRenderTargets(1, &mgr.rtv_[mgr.frame_index_]->getHandle().getCpuHandle(), FALSE, &mgr.dsv_->getHandle().getCpuHandle());
 
 
 			// 深度ステンシルビューとレンダーターゲットビューのクリア
-			mgr.command_list_->ClearDepthStencilView(mgr.dsv_->handle_, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-			mgr.command_list_->ClearRenderTargetView(mgr.rtv_[mgr.frame_index_]->handle_, mgr.rtv_[mgr.frame_index_]->clear_color_.c, 0, nullptr);
+			mgr.command_list_->ClearDepthStencilView(mgr.dsv_->getHandle().getCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+			mgr.command_list_->ClearRenderTargetView(mgr.rtv_[mgr.frame_index_]->getHandle().getCpuHandle(), mgr.rtv_[mgr.frame_index_]->getClearColor().c, 0, nullptr);
 		}
 
 		//==================================================
@@ -107,7 +107,7 @@ namespace eng {
 		// バックバッファの描画完了を待つためのバリアを設置
 		{
 			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				mgr.rtv_[mgr.frame_index_]->buffer_.Get(),
+				mgr.rtv_[mgr.frame_index_]->getBuffer().Get(),
 				D3D12_RESOURCE_STATE_RENDER_TARGET,	// 遷移前は描画ターゲット
 				D3D12_RESOURCE_STATE_PRESENT);		// 遷移後はPresent
 			mgr.command_list_->ResourceBarrier(1, &barrier);

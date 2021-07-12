@@ -10,10 +10,21 @@ namespace eng {
 	class Texture final : public lib::SmartFactory {
 		// 登録するため
 		friend class lib::SharedFlyweightMap<std::string, Texture>;
+	private:
+		template<class T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
 	public:
 		using s_ptr = std::shared_ptr<Texture>;
 		using w_ptr = std::weak_ptr<Texture>;
 	private:
+		//====================================================================================================
+		// メンバ変数
+
+		UINT width_ = 0;					// 幅
+		UINT height_ = 0;					// 高さ
+		ComPtr<ID3D12Resource> texture_;	// テクスチャ
+		DescriptorHandle handle_;			// ハンドル
+
 		//====================================================================================================
 		// static変数
 
@@ -31,12 +42,13 @@ namespace eng {
 		~Texture() {}
 
 		//====================================================================================================
-		// メンバ変数
+		// メンバ関数
 
-		UINT width_ = 0;	// 幅
-		UINT height_ = 0;	// 高さ
-		Microsoft::WRL::ComPtr<ID3D12Resource> texture_;	// テクスチャ
-		DescriptorHandle handle_;							// ハンドル
+		// ゲッター
+		inline UINT getWidth() const { return width_; }
+		inline UINT getHeight() const { return height_; }
+		inline ComPtr<ID3D12Resource> const getTexture() { return texture_; }
+		inline DescriptorHandle getHandle() const { return handle_; }
 
 		//====================================================================================================
 		// static関数
