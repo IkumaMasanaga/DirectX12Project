@@ -12,6 +12,10 @@
 #include "object/mesh.h"
 
 #include "graphics/graphics_manager.h"
+#include "graphics/descriptor_manager.h"
+#include "graphics/descriptor_handle.h"
+#include "graphics/render_target_view.h"
+#include "graphics/depth_stencil_view.h"
 #include "graphics/shape.h"
 #include "graphics/texture.h"
 #include "graphics/shader.h"
@@ -21,7 +25,7 @@
 #include "object/component/camera.h"
 
 #include "object/component/renderer/renderer.h"
-#include "object/component/renderer/mesh_renderer.h"
+#include "object/component/renderer/default_mesh_renderer.h"
 
 
 namespace eng {

@@ -88,7 +88,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createPlaneXY(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createPlaneXY(desc), texture_file_path);
 		return ptr;
@@ -96,7 +96,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createPlaneYZ(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createPlaneYZ(desc), texture_file_path);
 		return ptr;
@@ -104,7 +104,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createPlaneZX(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createPlaneZX(desc), texture_file_path);
 		return ptr;
@@ -112,7 +112,7 @@ namespace eng {
 	
 	GameObject::s_ptr GameObject::createCube(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(6);
 
 		std::function<Shape::s_ptr(const Shape::CreateDesc&)> create_func[6] = {
@@ -156,7 +156,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createTriangleIsosceles(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createTriangleIsosceles(desc), texture_file_path);
 		return ptr;
@@ -164,7 +164,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createTriangleRight(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createTriangleRight(desc), texture_file_path);
 		return ptr;
@@ -172,7 +172,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createTriangleLeft(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createTriangleLeft(desc), texture_file_path);
 		return ptr;
@@ -180,7 +180,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createTriangleEquilateral(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createTriangleEquilateral(desc), texture_file_path);
 		return ptr;
@@ -188,7 +188,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createSphere(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createSphere(desc), texture_file_path);
 		return ptr;
@@ -196,7 +196,7 @@ namespace eng {
 
 	GameObject::s_ptr GameObject::createDome(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createDome(desc), texture_file_path);
 		return ptr;
@@ -204,7 +204,7 @@ namespace eng {
 	
 	GameObject::s_ptr GameObject::createCone(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createCone(desc), texture_file_path);
 		return ptr;
@@ -212,7 +212,7 @@ namespace eng {
 	
 	GameObject::s_ptr GameObject::createDisk(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createDisk(desc), texture_file_path);
 		return ptr;
@@ -220,7 +220,7 @@ namespace eng {
 	
 	GameObject::s_ptr GameObject::createDiskRing(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createDiskRing(desc), texture_file_path);
 		return ptr;
@@ -228,7 +228,7 @@ namespace eng {
 	
 	GameObject::s_ptr GameObject::createCylinder(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
-		MeshRenderer::s_ptr renderer = ptr->addComponent<MeshRenderer>();
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
 		renderer->meshs_.resize(1);
 		renderer->meshs_[0] = Mesh::createFromShape(Shape::createCylinder(desc), texture_file_path);
 		return ptr;

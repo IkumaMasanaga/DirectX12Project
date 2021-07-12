@@ -45,8 +45,8 @@ namespace eng {
 		// メンバ関数
 
 		// ゲッター
-		inline UINT getWidth() const { return width_; }
-		inline UINT getHeight() const { return height_; }
+		inline uint32_t getWidth() const { return width_; }
+		inline uint32_t getHeight() const { return height_; }
 		inline ComPtr<ID3D12Resource> const getTexture() { return texture_; }
 		inline DescriptorHandle getHandle() const { return handle_; }
 

@@ -1,13 +1,8 @@
-#include "../system/d3dx12.h"
-
 #include "graphics/graphics_manager.h"
-#include "graphics/render_target_view.h"
-#include "graphics/depth_stencil_view.h"
-#include "graphics/pipeline_state.h"
 #include "scene.h"
 #include "object/game_object.h"
 #include "object/component/camera.h"
-#include "object/component/renderer/renderer.h"
+#include "object/component/renderer/renderer.h"	// addComponentでのエラー防止
 
 
 using namespace Microsoft::WRL;
@@ -57,17 +52,21 @@ namespace eng {
 	void Scene::render() {
 
 		GraphicsManager& mgr = GraphicsManager::getInstance();
-		ComPtr<ID3D12GraphicsCommandList> com_list = mgr.getCommandList();
 
-		if (FAILED(mgr.getCommandAllocator()->Reset())) return;
-		if (FAILED(mgr.getCommandList()->Reset(mgr.getCommandAllocator().Get(), mgr.getDefaultPso()->getObject().Get()))) return;
+		// コマンドアロケーターとコマンドリストのリセット
+		if (!mgr.resetCommandList()) {
+			lib_DebugLog("ERROR: GraphicsManager::resetCommandList");
+			return;
+		}
 
+		// 描画前の処理
+		// ビューポートの設定
+		// PRESENT→RENDER_TERGETへ遷移のバリアをはる
+		// レンダーターゲットの設定
+		// レンダーターゲットと深度バッファのクリア
+		mgr.renderBefore(sys::Window::VIEWPORT, sys::Window::SCISSOR_RECT, mgr.getMainRtv(), mgr.getMainDsv());
 
-		mgr.beforeRender(sys::Window::VIEWPORT, sys::Window::SCISSOR_RECT, mgr.getRtv(), mgr.getDsv());
-
-		//==================================================
-
-
+		// コマンドリストへ描画処理をため込む
 		std::list<std::shared_ptr<GameObject>>::iterator it = game_objects_.begin();
 		while (it != game_objects_.end()) {
 			if ((*it)->isActive()) {
@@ -76,12 +75,14 @@ namespace eng {
 			++it;
 		}
 
+		// RENDER_TERGET→PRESENTへ遷移のバリアをはる
+		mgr.renderAfter(mgr.getMainRtv());
 
-		//==================================================
-
-		mgr.afterRender(mgr.getRtv());
-
-		mgr.executeCommandList();
+		// コマンドリストにため込まれた描画処理を最終出力
+		if (!mgr.executeCommandList()) {
+			lib_DebugLog("ERROR: GraphicsManager::executeCommandList");
+			return;
+		}
 
 	}
 

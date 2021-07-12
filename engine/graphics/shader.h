@@ -7,6 +7,7 @@
 namespace eng {
 
 	class Shader final : public lib::SmartFactory {
+		// ìoò^Ç∑ÇÈÇΩÇﬂ
 		friend class lib::SharedFlyweightMap<LPCWSTR, Shader>;
 	private:
 		template<class T>
@@ -24,7 +25,6 @@ namespace eng {
 			D3D12_INPUT_ELEMENT_DESC* input_element_desc_ = nullptr;
 			UINT input_element_size_ = 0;
 			D3D12_ROOT_SIGNATURE_DESC root_signature_desc_ = {};
-			std::function<void(ID3D12Resource*, lib::Matrix4x4*, lib::Matrix4x4*)> setting_func_;
 		};
 
 	private:
@@ -65,8 +65,6 @@ namespace eng {
 		inline ComPtr<ID3DBlob> getVertexShader() const { return vertex_shader_; }
 		inline ComPtr<ID3DBlob> getPixelShader() const { return pixel_shader_; }
 		inline ComPtr<ID3D12RootSignature> getRootSignature() const { return root_signature_; }
-
-		std::function<void(ID3D12Resource*, lib::Matrix4x4*, lib::Matrix4x4*)> setting_func_;	// ê›íËä÷êî è¡Ç∑
 
 		//====================================================================================================
 		// staticä÷êî

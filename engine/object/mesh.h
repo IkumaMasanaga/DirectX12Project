@@ -12,6 +12,9 @@ namespace eng {
 	class PipelineState;
 
 	class Mesh final : public Object {
+	private:
+		template<class T>
+		using ComPtr = Microsoft::WRL::ComPtr<T>;
 	public:
 		using s_ptr = std::shared_ptr<Mesh>;
 		using w_ptr = std::weak_ptr<Mesh>;
@@ -20,7 +23,7 @@ namespace eng {
 		// メンバ関数
 
 		// 定数バッファの作成
-		bool createCBV();
+		bool createCbv();
 
 		//====================================================================================================
 	public:
@@ -30,7 +33,7 @@ namespace eng {
 		//====================================================================================================
 		// メンバ変数
 
-		Microsoft::WRL::ComPtr<ID3D12Resource> cbv_;	// 定数バッファ
+		ComPtr<ID3D12Resource> cbv_;					// 定数バッファ
 		std::shared_ptr<Shape> shape_ = nullptr;		// 形状データ
 		std::shared_ptr<Material> material_ = nullptr;	// マテリアル
 		std::shared_ptr<PipelineState> pso_ = nullptr;	// パイプラインステートオブジェクト

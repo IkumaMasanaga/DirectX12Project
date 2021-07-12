@@ -24,7 +24,10 @@ namespace sys {
 			// DirectX12がサポートする利用可能なハードウェアアダプタを取得
 			if (FAILED(CreateDXGIFactory1(IID_PPV_ARGS(&factory_)))) return false;
 
-			if (is_use_warp_device_) {
+			// D3D12CreateDeviceが失敗する場合はビデオカードがDirectX12に対応していないので is_use_warp_device_ をtrueにする
+			bool is_use_warp_device = false;
+
+			if (is_use_warp_device) {
 				ComPtr<IDXGIAdapter> warp_adapter;
 				if (FAILED(factory_->EnumWarpAdapter(IID_PPV_ARGS(&warp_adapter)))) return false;
 				if (FAILED(D3D12CreateDevice(warp_adapter.Get(), D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&device_)))) return false;

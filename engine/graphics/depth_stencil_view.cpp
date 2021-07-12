@@ -1,5 +1,4 @@
 #include "../../system/dx12_manager.h"
-#include "graphics_manager.h"
 #include "descriptor_manager.h"
 #include "depth_stencil_view.h"
 
@@ -12,7 +11,7 @@ namespace eng {
 
 	DepthStencilView::s_ptr DepthStencilView::create(const LONG width, const LONG height) {
 		DepthStencilView::s_ptr ptr = DepthStencilView::createShared<DepthStencilView>();
-		sys::Dx12Manager& mgr = sys::Dx12Manager::getInstance();
+		ComPtr<ID3D12Device> device = sys::Dx12Manager::getInstance().getDevice();
 
 		//深度バッファの作成
 		D3D12_HEAP_PROPERTIES heap_properties = {};
@@ -40,7 +39,7 @@ namespace eng {
 		clear_value.DepthStencil.Depth = 1.0f;
 		clear_value.DepthStencil.Stencil = 0;
 
-		if (FAILED(mgr.device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &clear_value, IID_PPV_ARGS(&ptr->buffer_)))) return nullptr;
+		if (FAILED(device->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_DEPTH_WRITE, &clear_value, IID_PPV_ARGS(&ptr->buffer_)))) return nullptr;
 
 		//深度バッファのビューの作成
 		D3D12_DEPTH_STENCIL_VIEW_DESC dsv_desc = {};
@@ -50,7 +49,7 @@ namespace eng {
 		dsv_desc.Flags = D3D12_DSV_FLAG_NONE;
 
 		ptr->handle_ = GraphicsManager::getInstance().getDsvHeap()->alloc();
-		mgr.device_->CreateDepthStencilView(ptr->buffer_.Get(), &dsv_desc, ptr->handle_.getCpuHandle());
+		device->CreateDepthStencilView(ptr->buffer_.Get(), &dsv_desc, ptr->handle_.getCpuHandle());
 
 		return ptr;
 	}

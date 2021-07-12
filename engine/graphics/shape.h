@@ -90,6 +90,8 @@ namespace eng {
 		inline ComPtr<ID3D12Resource> const getIndexBuffer() { return ibo_; }
 		inline int getVertexNum() const { return vertex_num_; }
 		inline int getIndexNum() const { return index_num_; }
+		inline D3D12_VERTEX_BUFFER_VIEW getVertexView() const { return { vbo_->GetGPUVirtualAddress(), sizeof(Vertex3D) * vertex_num_, sizeof(Vertex3D) }; }
+		inline D3D12_INDEX_BUFFER_VIEW getIndexView() const { return { ibo_->GetGPUVirtualAddress(), sizeof(uint32_t) * index_num_, DXGI_FORMAT_R32_UINT }; }
 
 		//====================================================================================================
 		// staticä÷êî

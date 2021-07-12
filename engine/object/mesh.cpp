@@ -9,7 +9,7 @@
 
 namespace eng {
 
-	bool Mesh::createCBV() {
+	bool Mesh::createCbv() {
 
 		D3D12_HEAP_PROPERTIES heap_properties{};
 		D3D12_RESOURCE_DESC   resource_desc{};
@@ -30,17 +30,15 @@ namespace eng {
 		resource_desc.SampleDesc.Count = 1;
 		resource_desc.SampleDesc.Quality = 0;
 
-		sys::Dx12Manager& mgr = sys::Dx12Manager::getInstance();
-
 		//定数バッファの作成
-		if (FAILED(mgr.device_->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&cbv_)))) return false;
+		if (FAILED(sys::Dx12Manager::getInstance().getDevice()->CreateCommittedResource(&heap_properties, D3D12_HEAP_FLAG_NONE, &resource_desc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&cbv_)))) return false;
 
 		return true;
 	}
 
 	Mesh::s_ptr Mesh::createFromShape(std::shared_ptr<Shape> shape,const std::string& texture_file_path) {
 		Mesh::s_ptr ptr = Mesh::createShared<Mesh>();
-		ptr->createCBV();
+		ptr->createCbv();
 		ptr->shape_ = shape;
 		ptr->material_ = Material::createShared<Material>();
 		ptr->material_->tex_diffuse_ = Texture::loadFromFile(texture_file_path);

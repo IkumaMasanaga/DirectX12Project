@@ -3,7 +3,6 @@
 #include <d3d12.h>
 #include <dxgi1_4.h>
 #include "../../system/system.h"
-//#include "../../system/dx12_manager.h"
 #include "../../library/library.h"
 
 
@@ -21,7 +20,7 @@ namespace eng {
 		friend class lib::Singleton<GraphicsManager>;
 		// initialize, finalizeを呼ぶため
 		friend class sys::System;
-		// setBeforRender, executeCommandListを呼ぶため
+		// resetCommandList, renderBefore, renderAfter, executeCommandListを呼ぶため
 		friend class Scene;
 	private:
 		template<class T>
@@ -74,11 +73,14 @@ namespace eng {
 		// 描画完了の同期を取る
 		bool waitForPreviousFrame();
 
+		// コマンドリストとコマンドアロケーターをリセット
+		bool resetCommandList();
+
 		// 描画前の処理
-		void beforeRender(const D3D12_VIEWPORT& viewport, const D3D12_RECT& scissor_rect, const std::shared_ptr<RenderTargetView>& rtv, const std::shared_ptr<DepthStencilView>& dsv);
+		void renderBefore(const D3D12_VIEWPORT& viewport, const D3D12_RECT& scissor_rect, const std::shared_ptr<RenderTargetView>& rtv, const std::shared_ptr<DepthStencilView>& dsv);
 
 		// 描画後の処理
-		void afterRender(const std::shared_ptr<RenderTargetView>& rtv);
+		void renderAfter(const std::shared_ptr<RenderTargetView>& rtv);
 
 		// コマンドリストを実行し描画
 		bool executeCommandList();
@@ -90,22 +92,15 @@ namespace eng {
 		//====================================================================================================
 		// メンバ変数
 
-		inline ComPtr<ID3D12CommandQueue> getCommandQueue() const { return command_queue_; }
-		inline ComPtr<ID3D12CommandAllocator> getCommandAllocator() const { return command_allocator_; }
+		// ゲッター
 		inline ComPtr<ID3D12GraphicsCommandList> getCommandList() const { return command_list_; }
-		inline ComPtr<IDXGISwapChain3> getSwapChain() const { return swap_chain_; }
 
 		inline std::shared_ptr<PipelineState> getDefaultPso() const { return default_pso_; }
 		inline std::shared_ptr<Shader> getDefaultShader() const { return default_shader_; }
 		inline std::shared_ptr<Texture> getDefaultTexture() const { return default_texture_; }
-
-		//--------------------------------------------------
-		// Layerに統合する？
 		
-		inline std::shared_ptr<RenderTargetView> getRtv() const { return rtv_[frame_index_]; }
-		inline std::shared_ptr<DepthStencilView> getDsv() const { return dsv_; }
-
-		//--------------------------------------------------
+		inline std::shared_ptr<RenderTargetView> getMainRtv() const { return rtv_[frame_index_]; }
+		inline std::shared_ptr<DepthStencilView> getMainDsv() const { return dsv_; }
 
 		inline std::shared_ptr<DescriptorManager> getRtvHeap() const { return rtv_heap_; }
 		inline std::shared_ptr<DescriptorManager> getDsvHeap() const { return dsv_heap_; }

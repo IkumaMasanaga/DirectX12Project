@@ -49,6 +49,7 @@ namespace eng {
 		//====================================================================================================
 		// メンバ関数
 
+		// ゲッター
 		inline ComPtr<ID3D12PipelineState> getObject() { return object_; }
 		inline std::shared_ptr<Shader> getShader() { return shader_; }
 

@@ -6,10 +6,10 @@ namespace eng {
 
 	class Mesh;
 
-	class MeshRenderer final : public Renderer {
+	class DefaultMeshRenderer : public Renderer {
 	public:
-		using s_ptr = std::shared_ptr<MeshRenderer>;
-		using w_ptr = std::weak_ptr<MeshRenderer>;
+		using s_ptr = std::shared_ptr<DefaultMeshRenderer>;
+		using w_ptr = std::weak_ptr<DefaultMeshRenderer>;
 	private:
 		//====================================================================================================
 		// ƒƒ“ƒoŠÖ”
@@ -19,8 +19,8 @@ namespace eng {
 
 		//====================================================================================================
 	public:
-		MeshRenderer() {}
-		~MeshRenderer() {}
+		DefaultMeshRenderer() {}
+		~DefaultMeshRenderer() {}
 
 		//====================================================================================================
 		// ƒƒ“ƒo•Ï”

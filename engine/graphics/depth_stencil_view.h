@@ -1,6 +1,5 @@
 #pragma once
 #include <wrl.h>
-#include <d3d12.h>
 #include "../../library/library.h"
 #include "descriptor_handle.h"
 

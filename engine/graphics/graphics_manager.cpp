@@ -57,7 +57,7 @@ namespace eng {
 				D3D12_DESCRIPTOR_HEAP_FLAG_NONE,	// シェーダの結果をリソースとして使用する場合は変更する？
 				0
 			};
-			rtv_heap_ = std::make_shared<DescriptorManager>(rtv_heap_desc);
+			rtv_heap_ = DescriptorManager::create(rtv_heap_desc);
 			for (UINT i = 0; i < FRAME_COUNT; i++) {
 				rtv_[i] = RenderTargetView::create(lib::Color(0.0f, 0.2f, 0.4f, 1.0f), sys::Window::WIDTH, sys::Window::HEIGHT);
 				if (FAILED(swap_chain_->GetBuffer(i, IID_PPV_ARGS(&rtv_[i]->getBuffer())))) return FALSE;
@@ -74,7 +74,7 @@ namespace eng {
 				D3D12_DESCRIPTOR_HEAP_FLAG_NONE,
 				0
 			};
-			dsv_heap_ = std::make_shared<DescriptorManager>(dsv_heap_desc);
+			dsv_heap_ = DescriptorManager::create(dsv_heap_desc);
 			dsv_ = DepthStencilView::create(sys::Window::WIDTH, sys::Window::HEIGHT);
 		}
 
@@ -149,25 +149,6 @@ namespace eng {
 			shader_desc.root_signature_desc_.pParameters = root_parameters;
 			shader_desc.root_signature_desc_.NumStaticSamplers = _countof(sampler_desc);
 			shader_desc.root_signature_desc_.pStaticSamplers = sampler_desc;
-
-			shader_desc.setting_func_ = [](ID3D12Resource* cbv, lib::Matrix4x4* world, lib::Matrix4x4* view_projection) {
-
-				//全ての変換行列
-				lib::Matrix4x4 mvp = lib::Matrix4x4::createTranspose(*world * *view_projection);
-
-				// ワールド行列をシェーダの定数バッファにセット
-				lib::Matrix4x4* buffer{};
-				if (FAILED(cbv->Map(0, nullptr, (void**)&buffer))) return;
-
-				//定数バッファをシェーダのレジスタにセット
-				GraphicsManager::getInstance().command_list_->SetGraphicsRootConstantBufferView(0, cbv->GetGPUVirtualAddress());
-
-				// 行列を定数バッファに書き込み
-				buffer[0] = mvp;
-				buffer[1] = *world;
-
-				cbv->Unmap(0, nullptr);
-			};
 
 			default_shader_ = eng::Shader::create(shader_desc);
 			if (!default_shader_) return false;
@@ -271,7 +252,7 @@ namespace eng {
 				D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
 				0
 			};
-			srv_heap_ = std::make_shared<DescriptorManager>(srv_heap_desc);
+			srv_heap_ = DescriptorManager::create(srv_heap_desc);
 
 			default_texture_ = Texture::loadFromFile("");
 			if (!default_texture_) return false;
@@ -310,7 +291,13 @@ namespace eng {
 		return true;
 	}
 
-	void GraphicsManager::beforeRender(const D3D12_VIEWPORT& viewport, const D3D12_RECT& scissor_rect, const std::shared_ptr<RenderTargetView>& rtv, const std::shared_ptr<DepthStencilView>& dsv) {
+	bool GraphicsManager::resetCommandList() {
+		if (FAILED(command_allocator_->Reset())) return false;
+		if (FAILED(command_list_->Reset(command_allocator_.Get(), default_pso_->getObject().Get()))) return false;
+		return true;
+	}
+
+	void GraphicsManager::renderBefore(const D3D12_VIEWPORT& viewport, const D3D12_RECT& scissor_rect, const std::shared_ptr<RenderTargetView>& rtv, const std::shared_ptr<DepthStencilView>& dsv) {
 
 		command_list_->RSSetViewports(1, &viewport);
 		command_list_->RSSetScissorRects(1, &scissor_rect);
@@ -320,37 +307,29 @@ namespace eng {
 		// GPUコア で使用されるリソースにバリアを張るらしい
 		// 例えば とある GPUコア で使用中のリソースを他の GPUコア が勝手に触れられないようにする処置だろうか
 		// この場合はレンダーターゲット( 描画対象のバックバッファ )にバリアを張っている
-		{
-			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				rtv->getBuffer().Get(),
-				D3D12_RESOURCE_STATE_PRESENT,			// 遷移前はPresent
-				D3D12_RESOURCE_STATE_RENDER_TARGET);	// 遷移後は描画ターゲット
-			command_list_->ResourceBarrier(1, &barrier);
-		}
+		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			rtv->getBuffer().Get(),
+			D3D12_RESOURCE_STATE_PRESENT,			// 遷移前はPresent
+			D3D12_RESOURCE_STATE_RENDER_TARGET);	// 遷移後は描画ターゲット
+		command_list_->ResourceBarrier(1, &barrier);
 
-		// オフスクリーンレンダリングを実装する際には変更する(サンプルを参考に)
-		{
-			// レンダーターゲットの設定
-			// カレントバッファを使用する
-			command_list_->OMSetRenderTargets(1, &rtv->getHandle().getCpuHandle(), FALSE, &dsv->getHandle().getCpuHandle());
+		// レンダーターゲットの設定
+		command_list_->OMSetRenderTargets(1, &rtv->getHandle().getCpuHandle(), FALSE, &dsv->getHandle().getCpuHandle());
 
-			// 深度ステンシルビューとレンダーターゲットビューのクリア
-			command_list_->ClearDepthStencilView(dsv->getHandle().getCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
-			command_list_->ClearRenderTargetView(rtv->getHandle().getCpuHandle(), rtv->getClearColor().c, 0, nullptr);
-		}
+		// 深度ステンシルビューとレンダーターゲットビューのクリア
+		command_list_->ClearDepthStencilView(dsv->getHandle().getCpuHandle(), D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, nullptr);
+		command_list_->ClearRenderTargetView(rtv->getHandle().getCpuHandle(), rtv->getClearColor().c, 0, nullptr);
 
 	}
 
-	void GraphicsManager::afterRender(const std::shared_ptr<RenderTargetView>& rtv) {
+	void GraphicsManager::renderAfter(const std::shared_ptr<RenderTargetView>& rtv) {
 
 		// バックバッファの描画完了を待つためのバリアを設置
-		{
-			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				rtv->getBuffer().Get(),
-				D3D12_RESOURCE_STATE_RENDER_TARGET,	// 遷移前は描画ターゲット
-				D3D12_RESOURCE_STATE_PRESENT);		// 遷移後はPresent
-			command_list_->ResourceBarrier(1, &barrier);
-		}
+		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			rtv->getBuffer().Get(),
+			D3D12_RESOURCE_STATE_RENDER_TARGET,	// 遷移前は描画ターゲット
+			D3D12_RESOURCE_STATE_PRESENT);		// 遷移後はPresent
+		command_list_->ResourceBarrier(1, &barrier);
 
 	}
 

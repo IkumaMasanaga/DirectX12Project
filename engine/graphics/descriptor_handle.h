@@ -4,8 +4,6 @@
 
 namespace eng {
 
-	// •ÏX‚·‚é‰Â”\«‚ ‚è
-	
 	class DescriptorHandle final {
 	private:
 		D3D12_CPU_DESCRIPTOR_HANDLE handle_cpu_;

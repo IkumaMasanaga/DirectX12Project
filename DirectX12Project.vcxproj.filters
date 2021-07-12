@@ -84,7 +84,7 @@
     <ClCompile Include="game\component\sample_component.cpp">
       <Filter>game\component</Filter>
     </ClCompile>
-    <ClCompile Include="engine\object\component\renderer\mesh_renderer.cpp">
+    <ClCompile Include="engine\object\component\renderer\default_mesh_renderer.cpp">
       <Filter>engine\object\component\renderer</Filter>
     </ClCompile>
     <ClCompile Include="engine\object\component\renderer\renderer.cpp">
@@ -215,7 +215,7 @@
     <ClInclude Include="game\component\sample_component.h">
       <Filter>game\component</Filter>
     </ClInclude>
-    <ClInclude Include="engine\object\component\renderer\mesh_renderer.h">
+    <ClInclude Include="engine\object\component\renderer\default_mesh_renderer.h">
       <Filter>engine\object\component\renderer</Filter>
     </ClInclude>
     <ClInclude Include="engine\object\component\renderer\renderer.h">

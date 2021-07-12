@@ -3,7 +3,7 @@
 #include "../../../graphics/pipeline_state.h"
 #include "../../../graphics/shader.h"
 #include "../../../graphics/texture.h"
-#include "mesh_renderer.h"
+#include "default_mesh_renderer.h"
 #include "../camera.h"
 #include "../../mesh.h"
 #include "../../material.h"
@@ -13,7 +13,7 @@ using namespace Microsoft::WRL;
 
 namespace eng {
 
-	void MeshRenderer::render(std::shared_ptr<Camera> camera) {
+	void DefaultMeshRenderer::render(std::shared_ptr<Camera> camera) {
 
 		GraphicsManager& mgr = GraphicsManager::getInstance();
 		ComPtr<ID3D12GraphicsCommandList> com_list = mgr.getCommandList();
@@ -38,38 +38,39 @@ namespace eng {
 
 			// テクスチャをシェーダのレジスタにセット
 			// テクスチャが設定されていない場合はデフォルトを設定するように変更する
-			com_list->SetDescriptorHeaps(1, mgr.getSrvHeap()->getHeap().GetAddressOf());	// ここじゃなくていい？
+			com_list->SetDescriptorHeaps(1, mgr.getSrvHeap()->getHeap().GetAddressOf());
 			com_list->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->getHandle().getGpuHandle());
-
 
 			//--------------------------------------------------
 
 			// ワールド行列
-			lib::Matrix4x4 m = (*it)->transform_->getWorldMatrix4x4() * getGameObject()->transform_->getWorldMatrix4x4();
+			lib::Matrix4x4 world = (*it)->transform_->getWorldMatrix4x4() * getGameObject()->transform_->getWorldMatrix4x4();
 
-			// 定数バッファに設定
-			// 1.定数バッファ
-			// 2.ワールド行列
-			// 3.ビュープロジェクション行列
-			(*it)->pso_->getShader()->setting_func_((*it)->cbv_.Get(), &m, &view_projection);
+			//全ての変換行列
+			lib::Matrix4x4 mvp = lib::Matrix4x4::createTranspose(world * view_projection);
+
+			// ワールド行列をシェーダの定数バッファにセット
+			lib::Matrix4x4* buffer{};
+			if (FAILED((*it)->cbv_->Map(0, nullptr, (void**)&buffer))) return;
+
+			//定数バッファをシェーダのレジスタにセット
+			com_list->SetGraphicsRootConstantBufferView(0, (*it)->cbv_->GetGPUVirtualAddress());
+
+			// 行列を定数バッファに書き込み
+			buffer[0] = mvp;
+			buffer[1] = world;
+
+			(*it)->cbv_->Unmap(0, nullptr);
 
 			//--------------------------------------------------
 
 			// インデックスを使用し、トライアングルリストを描画
-			D3D12_VERTEX_BUFFER_VIEW vertex_view{};
-			vertex_view.BufferLocation = (*it)->shape_->getVertexBuffer()->GetGPUVirtualAddress();
-			vertex_view.StrideInBytes = sizeof(Vertex3D);
-			vertex_view.SizeInBytes = sizeof(Vertex3D) * (*it)->shape_->getVertexNum();
-
-			D3D12_INDEX_BUFFER_VIEW index_view{};
-			index_view.BufferLocation = (*it)->shape_->getIndexBuffer()->GetGPUVirtualAddress();
-			index_view.SizeInBytes = sizeof(uint32_t) * (*it)->shape_->getIndexNum();
-			index_view.Format = DXGI_FORMAT_R32_UINT;
+			D3D12_VERTEX_BUFFER_VIEW vertex_view = (*it)->shape_->getVertexView();
+			D3D12_INDEX_BUFFER_VIEW index_view = (*it)->shape_->getIndexView();
 
 			com_list->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 			com_list->IASetVertexBuffers(0, 1, &vertex_view);
 			com_list->IASetIndexBuffer(&index_view);
-
 
 			// 描画
 			com_list->DrawIndexedInstanced((*it)->shape_->getIndexNum(), 1, 0, 0, 0);

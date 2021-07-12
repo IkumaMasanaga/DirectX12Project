@@ -11,7 +11,7 @@ namespace eng {
 		Microsoft::WRL::ComPtr<ID3DBlob> blob;
 
 		if (FAILED(D3D12SerializeRootSignature(&desc.root_signature_desc_, D3D_ROOT_SIGNATURE_VERSION_1, &blob, nullptr))) return nullptr;		
-		if (FAILED(sys::Dx12Manager::getInstance().device_->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&ptr->root_signature_)))) return nullptr;
+		if (FAILED(sys::Dx12Manager::getInstance().getDevice()->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&ptr->root_signature_)))) return nullptr;
 
 #if defined(_DEBUG)
 		// グラフィックデバッグツールによるシェーダーのデバッグを有効にする
@@ -24,7 +24,6 @@ namespace eng {
 
 		ptr->input_element_desc_ = desc.input_element_desc_;
 		ptr->input_element_size_ = desc.input_element_size_;
-		ptr->setting_func_ = desc.setting_func_;
 
 		return ptr;
 	}
