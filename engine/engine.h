@@ -26,6 +26,7 @@
 
 #include "object/component/renderer/renderer.h"
 #include "object/component/renderer/default_mesh_renderer.h"
+#include "object/component/renderer/skybox.h"
 
 
 namespace eng {

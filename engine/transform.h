@@ -164,6 +164,12 @@ namespace eng {
 		inline void translate(const lib::Vector3& vector) {
 			translate(vector.x, vector.y, vector.z);
 		}
+		inline void translateWorld(const float x, const float y, const float z) {
+			local_position_ += lib::Vector3(x, y, z);
+		}
+		inline void translateWorld(const lib::Vector3& vector) {
+			local_position_ += vector;
+		}
 
 		// ‰ñ“]
 		inline void rotate(const lib::Vector3& axis, const float angle) {

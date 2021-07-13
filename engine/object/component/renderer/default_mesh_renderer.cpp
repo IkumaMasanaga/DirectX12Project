@@ -13,7 +13,7 @@ using namespace Microsoft::WRL;
 
 namespace eng {
 
-	void DefaultMeshRenderer::render(std::shared_ptr<Camera> camera) {
+	void DefaultMeshRenderer::render(const std::shared_ptr<Camera>& camera) {
 
 		GraphicsManager& mgr = GraphicsManager::getInstance();
 		ComPtr<ID3D12GraphicsCommandList> com_list = mgr.getCommandList();

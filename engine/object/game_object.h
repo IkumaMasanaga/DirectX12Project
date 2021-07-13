@@ -81,7 +81,7 @@ namespace eng {
 			std::list<std::shared_ptr<Component>>::iterator it = components_.begin();
 			while (it != components_.end()) {
 				if (typeid(*(*it)) == typeid(T)) {
-					if (count == find_count) return (*it);
+					if (count == find_count) return std::static_pointer_cast<T>((*it));
 					++count;
 				}
 				++it;
@@ -106,6 +106,8 @@ namespace eng {
 		static GameObject::s_ptr createPlaneZX(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 		// キューブ
 		static GameObject::s_ptr createCube(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
+		// 内面が表のキューブ
+		static GameObject::s_ptr createInnerCube(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 		// 二等辺三角形
 		static GameObject::s_ptr createTriangleIsosceles(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 		// 直角三角形

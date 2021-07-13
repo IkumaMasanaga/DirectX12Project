@@ -176,6 +176,50 @@ namespace eng {
 		return ptr;
 	}
 
+	GameObject::s_ptr GameObject::createInnerCube(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
+		GameObject::s_ptr ptr = GameObject::createEmpty(name);
+		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();
+		renderer->meshs_.resize(6);
+
+		std::function<Shape::s_ptr(const Shape::CreateDesc&)> create_func[6] = {
+			Shape::createPlaneXY,
+			Shape::createPlaneXY,
+			Shape::createPlaneYZ,
+			Shape::createPlaneYZ,
+			Shape::createPlaneZX,
+			Shape::createPlaneZX,
+		};
+
+		for (int i = 0; i < 6; ++i) {
+			Shape::CreateDesc d = desc;
+			if (!desc.regist_name.empty()) d.regist_name += "_" + std::to_string(i);
+			renderer->meshs_[i] = Mesh::createFromShape(create_func[i](d), texture_file_path);
+		}
+
+		float w2 = (desc.width / 2) - FLT_EPSILON;
+		float h2 = (desc.height / 2) - FLT_EPSILON;
+		float d2 = (desc.depth / 2) - FLT_EPSILON;
+		lib::Vector3 pos_ofs[6] = {
+			{   0, 0, -d2 }, { 0,  0, d2 }, { -w2,   0, 0 },
+			{ w2, 0,  0 }, { 0, -h2,   0 }, {  0, h2, 0 }
+		};
+		lib::Vector3 rot_axis[6] = {
+			{ 0, 1, 0 }, { 0, 1, 0 }, { 0, 1, 0 },
+			{ 0, 1, 0 }, { 1, 0, 0 }, { 1, 0, 0 }
+		};
+		float rot_angles[6] = {
+			  0, 180,   0,
+			180,   0, 180
+		};
+
+		for (int i = 0; i < 6; ++i) {
+			renderer->meshs_[i]->transform_->local_position_ = pos_ofs[i];
+			renderer->meshs_[i]->transform_->local_rotation_ = lib::Quaternion::createRotationAxis(rot_axis[i], lib::Math::toRadian(rot_angles[i]));
+		}
+
+		return ptr;
+	}
+
 	GameObject::s_ptr GameObject::createTriangleIsosceles(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path) {
 		GameObject::s_ptr ptr = GameObject::createEmpty(name);
 		DefaultMeshRenderer::s_ptr renderer = ptr->addComponent<DefaultMeshRenderer>();

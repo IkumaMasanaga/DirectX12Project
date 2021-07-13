@@ -15,7 +15,7 @@ namespace eng {
 		// ƒƒ“ƒoŠÖ”
 
 		// •`‰æ
-		void render(std::shared_ptr<Camera> camera) final override;
+		void render(const std::shared_ptr<Camera>& camera) final override;
 
 		//====================================================================================================
 	public:

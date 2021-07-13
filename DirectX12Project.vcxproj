@@ -94,6 +94,7 @@
     <ClCompile Include="engine\object\component\component.cpp" />
     <ClCompile Include="engine\object\component\renderer\default_mesh_renderer.cpp" />
     <ClCompile Include="engine\object\component\renderer\renderer.cpp" />
+    <ClCompile Include="engine\object\component\renderer\skybox.cpp" />
     <ClCompile Include="engine\object\game_object.cpp" />
     <ClCompile Include="engine\object\material.cpp" />
     <ClCompile Include="engine\object\mesh.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="engine\object\component\component.h" />
     <ClInclude Include="engine\object\component\renderer\default_mesh_renderer.h" />
     <ClInclude Include="engine\object\component\renderer\renderer.h" />
+    <ClInclude Include="engine\object\component\renderer\skybox.h" />
     <ClInclude Include="engine\object\game_object.h" />
     <ClInclude Include="engine\object\material.h" />
     <ClInclude Include="engine\object\mesh.h" />

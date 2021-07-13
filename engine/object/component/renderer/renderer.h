@@ -21,7 +21,7 @@ namespace eng {
 
 		// •`‰æ
 		// TODO: Layer‚ðŽÀ‘•‚µ‚½‚çLayer‚É•Ï‚¦‚é
-		virtual void render(std::shared_ptr<Camera> camera) {}
+		virtual void render(const std::shared_ptr<Camera>& camera) {}
 
 		//====================================================================================================
 	public:

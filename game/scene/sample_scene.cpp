@@ -5,12 +5,17 @@
 
 bool SampleScene::initialize() {
 
+	camera_->getTransform()->local_position_.set(0.0f, 30.0f, -40.0f);
+	camera_->getTransform()->rotate(lib::Vector3::RIGHT, lib::Math::toRadian(45.0f));
+	//camera_->addComponent<SampleComponent>();
+
 	eng::Shape::CreateDesc desc = {};
 	eng::GameObject::s_ptr obj1 = nullptr;
 
 	const float OFFSET_1 = 8.0f;
 	const float OFFSET_2 = 24.0f;
 	const std::string TEX_PATH = "resources/texture/test.bmp";
+	//const std::string TEX_PATH = "";
 
 
 	obj1 = eng::GameObject::createPlaneXY("plane_xy", desc, TEX_PATH);
@@ -71,17 +76,14 @@ bool SampleScene::initialize() {
 	obj1 = eng::GameObject::createCylinder("cylinder", desc, TEX_PATH);
 	obj1->transform_->local_position_.set(OFFSET_1, 0.0f, -OFFSET_2);
 	obj1->addComponent<SampleComponent>();
-	
 
-	camera_->getTransform()->local_position_.set(0.0f, 30.0f, -40.0f);
-	camera_->getTransform()->rotate(lib::Vector3::RIGHT, lib::Math::toRadian(45.0f));
 
 	return true;
 }
 
 void SampleScene::lateUpdate() {
 
-
+	
 
 }
 

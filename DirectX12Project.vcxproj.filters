@@ -147,6 +147,9 @@
     <ClCompile Include="library\color.cpp">
       <Filter>library</Filter>
     </ClCompile>
+    <ClCompile Include="engine\object\component\renderer\skybox.cpp">
+      <Filter>engine\object\component\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\dx12_manager.h">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="engine\graphics\descriptor_handle.h">
       <Filter>engine\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="engine\object\component\renderer\skybox.h">
+      <Filter>engine\object\component\renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
