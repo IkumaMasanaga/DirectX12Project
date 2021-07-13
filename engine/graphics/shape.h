@@ -30,16 +30,16 @@ namespace eng {
 		};
 
 		struct CreateDesc {
-			std::string regist_name_ = "";
-			float width_ = 10.0f;
-			float height_ = 10.0f;
-			float depth_ = 10.0f;
-			float radius_ = 5.0f;
-			float thickness_ = 3.0f;
-			float egge_lenght_ = 10.0f;
-			int stacks_ = 10;
-			int slices_ = 10;
-			Angle angle_ = Angle::ANGLE_360;
+			std::string regist_name = "";
+			float width = 10.0f;
+			float height = 10.0f;
+			float depth = 10.0f;
+			float radius = 5.0f;
+			float thickness = 3.0f;
+			float egge_lenght = 10.0f;
+			int stacks = 10;
+			int slices = 10;
+			Angle angle = Angle::ANGLE_360;
 		};
 
 	private:

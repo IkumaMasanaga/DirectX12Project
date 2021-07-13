@@ -18,9 +18,9 @@ namespace eng {
 		using w_ptr = std::weak_ptr<PipelineState>;
 
 		struct CreateDesc {
-			std::string regist_name_ = "default";
-			std::shared_ptr<Shader> shader_ = nullptr;
-			D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc_ = {};
+			std::string regist_name = "default";
+			std::shared_ptr<Shader> shader = nullptr;
+			D3D12_GRAPHICS_PIPELINE_STATE_DESC pso_desc = {};
 		};
 
 	private:

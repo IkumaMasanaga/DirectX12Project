@@ -29,7 +29,7 @@ namespace eng {
 				it = game_objects_.erase(it);
 				continue;
 			}
-			if ((*it)->isActive()) {
+			if ((*it)->isActiveParent()) {
 				if (!(*it)->is_enable_) {
 					(*it)->onEnable();
 					(*it)->is_enable_ = true;
@@ -69,7 +69,7 @@ namespace eng {
 		// コマンドリストへ描画処理をため込む
 		std::list<std::shared_ptr<GameObject>>::iterator it = game_objects_.begin();
 		while (it != game_objects_.end()) {
-			if ((*it)->isActive()) {
+			if ((*it)->isActiveParent()) {
 				(*it)->render(camera_);
 			}
 			++it;

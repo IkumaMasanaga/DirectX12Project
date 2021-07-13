@@ -79,6 +79,28 @@ namespace eng {
 
 	}
 
+	bool GameObject::isActiveParent() {
+		if (!isActive()) return false;
+		Transform<GameObject>::s_ptr parent = transform_->getParent();
+		if (!parent) return true;
+		GameObject::s_ptr parent_obj = parent->getIncluded();
+		return parent_obj->isActiveParent();
+	}
+
+	void GameObject::destroy() {
+		Object::destroy();
+		for (const auto& com : components_) {
+			com->destroy();
+		}
+		transform_->roundup([](Transform<GameObject>::s_ptr ptr) {
+			GameObject::s_ptr child = ptr->getIncluded();
+			child->Object::destroy();
+			for (const auto& child_com : child->components_) {
+				child_com->destroy();
+			}
+		});
+	}
+
 	GameObject::s_ptr GameObject::createEmpty(const std::string& name) {
 		GameObject::s_ptr ptr = GameObject::createShared<GameObject>();
 		ptr->setName(name);
@@ -126,13 +148,13 @@ namespace eng {
 
 		for (int i = 0; i < 6; ++i) {
 			Shape::CreateDesc d = desc;
-			if (!desc.regist_name_.empty()) d.regist_name_ += "_" + std::to_string(i);
+			if (!desc.regist_name.empty()) d.regist_name += "_" + std::to_string(i);
 			renderer->meshs_[i] = Mesh::createFromShape(create_func[i](d), texture_file_path);
 		}
 
-		float w2 = (desc.width_ / 2) - FLT_EPSILON;
-		float h2 = (desc.height_ / 2) - FLT_EPSILON;
-		float d2 = (desc.depth_ / 2) - FLT_EPSILON;
+		float w2 = (desc.width / 2) - FLT_EPSILON;
+		float h2 = (desc.height / 2) - FLT_EPSILON;
+		float d2 = (desc.depth / 2) - FLT_EPSILON;
 		lib::Vector3 pos_ofs[6] = {
 			{   0, 0, d2 }, { 0,  0, -d2 }, { w2,   0, 0 },
 			{ -w2, 0,  0 }, { 0, h2,   0 }, {  0, -h2, 0 }

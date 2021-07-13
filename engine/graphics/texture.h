@@ -22,7 +22,7 @@ namespace eng {
 
 		uint32_t width_ = 0;				// 幅
 		uint32_t height_ = 0;				// 高さ
-		ComPtr<ID3D12Resource> texture_;	// テクスチャ
+		ComPtr<ID3D12Resource> resource_;	// テクスチャ
 		DescriptorHandle handle_;			// ハンドル
 
 		//====================================================================================================
@@ -47,7 +47,7 @@ namespace eng {
 		// ゲッター
 		inline uint32_t getWidth() const { return width_; }
 		inline uint32_t getHeight() const { return height_; }
-		inline ComPtr<ID3D12Resource> const getTexture() { return texture_; }
+		inline ComPtr<ID3D12Resource> const getResource() { return resource_; }
 		inline DescriptorHandle getHandle() const { return handle_; }
 
 		//====================================================================================================

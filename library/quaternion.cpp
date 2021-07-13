@@ -9,32 +9,6 @@ namespace lib {
 	const Quaternion Quaternion::IDENTITY = Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
 
 	Quaternion::Quaternion(const Vector3& v, const float w) : x(v.x), y(v.y), z(v.z), w(w) {}
-
-	Quaternion Quaternion::operator +(const Quaternion& other) const {
-		return Quaternion(x + other.x, y + other.y, z + other.z, w + other.w);
-	}
-
-	Quaternion& Quaternion::operator +=(const Quaternion& other) {
-		*this = *this + other;
-		return *this;
-	}
-
-	Quaternion Quaternion::operator -(const Quaternion& other) const {
-		Quaternion q = createInverse(*this);
-		q *= other;
-		if (q.w < 0) {
-			q.x = -q.x;
-			q.y = -q.y;
-			q.z = -q.z;
-			q.w = -q.w;
-		}
-		return q;
-	}
-
-	Quaternion& Quaternion::operator -=(const Quaternion& other) {
-		*this = *this - other;
-		return *this;
-	}
 	
 	Quaternion Quaternion::operator *(const Quaternion& other) const {
 		return Quaternion(

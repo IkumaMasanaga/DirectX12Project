@@ -30,10 +30,6 @@ namespace lib {
 		// ƒƒ“ƒoŠÖ”
 
 		// Šeí‰‰Zq
-		Quaternion operator +(const Quaternion& other) const;
-		Quaternion& operator +=(const Quaternion& other);
-		Quaternion operator -(const Quaternion& other) const;
-		Quaternion& operator -=(const Quaternion& other);
 		Quaternion operator *(const Quaternion& other) const;
 		Quaternion& operator *=(const Quaternion& other);
 		inline operator DirectX::XMFLOAT4() const { return DirectX::XMFLOAT4(x, y, z, w); }

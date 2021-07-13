@@ -17,14 +17,14 @@ namespace eng {
 		using w_ptr = std::weak_ptr<Shader>;
 
 		struct CreateDesc {
-			LPCWSTR file_path_ = L"engine/resources/default_shader.fx";
-			std::string vertex_func_name_ = "";
-			std::string vertex_target_ = "";
-			std::string pixel_func_name_ = "";
-			std::string pixel_target_ = "";
-			D3D12_INPUT_ELEMENT_DESC* input_element_desc_ = nullptr;
-			UINT input_element_size_ = 0;
-			D3D12_ROOT_SIGNATURE_DESC root_signature_desc_ = {};
+			LPCWSTR file_path = L"engine/resources/default_shader.fx";
+			std::string vertex_shader_name = "";
+			std::string vertex_target = "";
+			std::string pixel_shader_name = "";
+			std::string pixel_target = "";
+			D3D12_INPUT_ELEMENT_DESC* input_element_desc = nullptr;
+			UINT input_element_size = 0;
+			D3D12_ROOT_SIGNATURE_DESC root_signature_desc = {};
 		};
 
 	private:

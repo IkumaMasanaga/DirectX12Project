@@ -13,7 +13,6 @@ namespace eng {
 	class GameObject final : public Object {
 		// 各種privateメンバにアクセスするため
 		friend class Scene;
-		friend class Layer;
 		// 基底クラスで生成するため
 		friend class lib::SmartFactory;
 	public:
@@ -90,12 +89,17 @@ namespace eng {
 			return nullptr;
 		}
 
+		// 自身の親の有効状態を再帰的に取得
+		bool isActiveParent();
+
+		// 自身にアタッチされているComponentと子供も一緒に削除
+		void destroy();
+
 		//====================================================================================================
 		// static関数
 
 		// 空のGameObjectの生成
 		static GameObject::s_ptr createEmpty(const std::string& name);
-
 		// 四角形
 		static GameObject::s_ptr createPlaneXY(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
 		static GameObject::s_ptr createPlaneYZ(const std::string& name, const Shape::CreateDesc& desc, const std::string& texture_file_path = "");
