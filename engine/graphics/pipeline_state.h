@@ -27,7 +27,7 @@ namespace eng {
 		//====================================================================================================
 		// メンバ変数
 
-		ComPtr<ID3D12PipelineState> object_;		// パイプラインステートオブジェクト
+		ComPtr<ID3D12PipelineState> pso_;			// パイプラインステートオブジェクト
 		std::shared_ptr<Shader> shader_ = nullptr;	// シェーダー
 
 		//====================================================================================================
@@ -50,7 +50,7 @@ namespace eng {
 		// メンバ関数
 
 		// ゲッター
-		inline ComPtr<ID3D12PipelineState> getObject() { return object_; }
+		inline ComPtr<ID3D12PipelineState> getPSO() { return pso_; }
 		inline std::shared_ptr<Shader> getShader() { return shader_; }
 
 		//====================================================================================================

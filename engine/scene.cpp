@@ -66,7 +66,7 @@ namespace eng {
 		// PRESENT→RENDER_TERGETへ遷移のバリアをはる
 		// レンダーターゲットの設定
 		// レンダーターゲットと深度バッファのクリア
-		mgr.renderBefore(sys::Window::VIEWPORT, sys::Window::SCISSOR_RECT, mgr.getMainRtv(), mgr.getMainDsv());
+		mgr.renderBefore(sys::Window::VIEWPORT, sys::Window::SCISSOR_RECT, mgr.getMainRTV(), mgr.getMainDSV());
 
 		// コマンドリストへ描画処理をため込む
 		std::list<std::shared_ptr<GameObject>>::iterator it = game_objects_.begin();
@@ -78,13 +78,16 @@ namespace eng {
 		}
 
 		// RENDER_TERGET→PRESENTへ遷移のバリアをはる
-		mgr.renderAfter(mgr.getMainRtv());
+		mgr.renderAfter(mgr.getMainRTV());
 
 		// コマンドリストにため込まれた描画処理を最終出力
 		if (!mgr.executeCommandList()) {
 			lib_DebugLog("ERROR: GraphicsManager::executeCommandList");
 			return;
 		}
+
+		// フレームを最終出力
+		mgr.presentSwapChain();
 
 	}
 

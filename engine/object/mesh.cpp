@@ -42,7 +42,7 @@ namespace eng {
 		ptr->shape_ = shape;
 		ptr->material_ = Material::createShared<Material>();
 		ptr->material_->tex_diffuse_ = Texture::loadFromFile(texture_file_path);
-		ptr->pso_ = GraphicsManager::getInstance().getDefaultPso();
+		ptr->pso_ = GraphicsManager::getInstance().getDefaultPSO();
 		ptr->transform_ = Transform<Mesh>::create(ptr);
 		return ptr;
 	}

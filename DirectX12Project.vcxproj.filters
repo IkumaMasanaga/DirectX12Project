@@ -150,6 +150,9 @@
     <ClCompile Include="engine\object\component\renderer\skybox.cpp">
       <Filter>engine\object\component\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="library\input.cpp">
+      <Filter>library</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="system\dx12_manager.h">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="engine\object\component\renderer\skybox.h">
       <Filter>engine\object\component\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="library\input.h">
+      <Filter>library</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

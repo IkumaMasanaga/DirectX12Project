@@ -76,6 +76,9 @@ namespace eng {
 		// コマンドリストとコマンドアロケーターをリセット
 		bool resetCommandList();
 
+		// バリアを貼る
+		void setResourceBarrier(ID3D12Resource* rtv, const D3D12_RESOURCE_STATES state_before, const D3D12_RESOURCE_STATES state_after);
+
 		// 描画前の処理
 		void renderBefore(const D3D12_VIEWPORT& viewport, const D3D12_RECT& scissor_rect, const std::shared_ptr<RenderTargetView>& rtv, const std::shared_ptr<DepthStencilView>& dsv);
 
@@ -84,6 +87,9 @@ namespace eng {
 
 		// コマンドリストを実行し描画
 		bool executeCommandList();
+
+		// フレームを最終出力
+		bool presentSwapChain();
 
 		//====================================================================================================
 	public:
@@ -95,16 +101,16 @@ namespace eng {
 		// ゲッター
 		inline ComPtr<ID3D12GraphicsCommandList> getCommandList() const { return command_list_; }
 
-		inline std::shared_ptr<PipelineState> getDefaultPso() const { return default_pso_; }
+		inline std::shared_ptr<PipelineState> getDefaultPSO() const { return default_pso_; }
 		inline std::shared_ptr<Shader> getDefaultShader() const { return default_shader_; }
 		inline std::shared_ptr<Texture> getDefaultTexture() const { return default_texture_; }
 		
-		inline std::shared_ptr<RenderTargetView> getMainRtv() const { return rtv_[frame_index_]; }
-		inline std::shared_ptr<DepthStencilView> getMainDsv() const { return dsv_; }
+		inline std::shared_ptr<RenderTargetView> getMainRTV() const { return rtv_[frame_index_]; }
+		inline std::shared_ptr<DepthStencilView> getMainDSV() const { return dsv_; }
 
-		inline std::shared_ptr<DescriptorManager> getRtvHeap() const { return rtv_heap_; }
-		inline std::shared_ptr<DescriptorManager> getDsvHeap() const { return dsv_heap_; }
-		inline std::shared_ptr<DescriptorManager> getSrvHeap() const { return srv_heap_; }
+		inline std::shared_ptr<DescriptorManager> getRTVHeap() const { return rtv_heap_; }
+		inline std::shared_ptr<DescriptorManager> getDSVHeap() const { return dsv_heap_; }
+		inline std::shared_ptr<DescriptorManager> getSRVHeap() const { return srv_heap_; }
 
 		//====================================================================================================
 	};

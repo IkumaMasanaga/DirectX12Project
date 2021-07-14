@@ -34,11 +34,11 @@ namespace eng {
 
 			// ルートシグネチャとPSOの設定
 			com_list->SetGraphicsRootSignature((*it)->pso_->getShader()->getRootSignature().Get());
-			com_list->SetPipelineState((*it)->pso_->getObject().Get());
+			com_list->SetPipelineState((*it)->pso_->getPSO().Get());
 
 			// テクスチャをシェーダのレジスタにセット
 			// テクスチャが設定されていない場合はデフォルトを設定するように変更する
-			com_list->SetDescriptorHeaps(1, mgr.getSrvHeap()->getHeap().GetAddressOf());
+			com_list->SetDescriptorHeaps(1, mgr.getSRVHeap()->getHeap().GetAddressOf());
 			com_list->SetGraphicsRootDescriptorTable(1, (*it)->material_->tex_diffuse_->getHandle().getGpuHandle());
 
 			//--------------------------------------------------

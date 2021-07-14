@@ -47,7 +47,7 @@ namespace eng {
 		srv_desc.Texture2D.ResourceMinLODClamp = 0.0F;
 		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-		ptr->handle_ = GraphicsManager::getInstance().getSrvHeap()->alloc();
+		ptr->handle_ = GraphicsManager::getInstance().getSRVHeap()->alloc();
 		device->CreateShaderResourceView(ptr->resource_.Get(), &srv_desc, ptr->handle_.getCpuHandle());
 
 		//‰æ‘œƒf[ƒ^‚Ì‘‚«ž‚Ý
@@ -86,7 +86,7 @@ namespace eng {
 		srv_desc.Texture2D.ResourceMinLODClamp = 0.0F;
 		srv_desc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-		ptr->handle_ = GraphicsManager::getInstance().getSrvHeap()->alloc();
+		ptr->handle_ = GraphicsManager::getInstance().getSRVHeap()->alloc();
 		device->CreateShaderResourceView(ptr->resource_.Get(), &srv_desc, ptr->handle_.getCpuHandle());
 
 		ptr->width_ = width;

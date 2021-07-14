@@ -86,8 +86,8 @@ namespace eng {
 		// メンバ関数
 
 		// ゲッター
-		inline ComPtr<ID3D12Resource> const getVertexBuffer() { return vbo_; }
-		inline ComPtr<ID3D12Resource> const getIndexBuffer() { return ibo_; }
+		inline ComPtr<ID3D12Resource> const getVBO() { return vbo_; }
+		inline ComPtr<ID3D12Resource> const getIBO() { return ibo_; }
 		inline int getVertexNum() const { return vertex_num_; }
 		inline int getIndexNum() const { return index_num_; }
 		inline D3D12_VERTEX_BUFFER_VIEW getVertexView() const { return { vbo_->GetGPUVirtualAddress(), sizeof(Vertex3D) * vertex_num_, sizeof(Vertex3D) }; }

@@ -55,7 +55,9 @@ namespace sys {
 		eng::Engine::getInstance().update();
 
 		// •`‰æŠ®—¹‚Ì“¯Šú
-		eng::GraphicsManager::getInstance().waitForPreviousFrame();
+		eng::GraphicsManager& mgr = eng::GraphicsManager::getInstance();
+		mgr.waitForPreviousFrame();
+		mgr.frame_index_ = mgr.swap_chain_->GetCurrentBackBufferIndex();
 
 	}
 	

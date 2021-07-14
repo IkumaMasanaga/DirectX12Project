@@ -15,7 +15,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{eaf0ef91-53f7-49de-b1be-eb8d87838027}</ProjectGuid>
     <RootNamespace>DirectX12Project</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -106,6 +106,7 @@
     <ClCompile Include="library\color.cpp" />
     <ClCompile Include="library\debug.cpp" />
     <ClCompile Include="library\fps_control.cpp" />
+    <ClCompile Include="library\input.cpp" />
     <ClCompile Include="library\library.cpp" />
     <ClCompile Include="library\math.cpp" />
     <ClCompile Include="library\matrix4x4.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="library\color.h" />
     <ClInclude Include="library\debug.h" />
     <ClInclude Include="library\fps_control.h" />
+    <ClInclude Include="library\input.h" />
     <ClInclude Include="library\library.h" />
     <ClInclude Include="library\link_linear.h" />
     <ClInclude Include="library\link_tree.h" />

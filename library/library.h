@@ -18,6 +18,7 @@
 #include "utility.h"
 #include "debug.h"
 #include "color.h"
+#include "input.h"
 
 
 namespace lib {

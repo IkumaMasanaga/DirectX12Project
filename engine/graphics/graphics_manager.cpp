@@ -260,7 +260,7 @@ namespace eng {
 
 		/* コマンドリストの作成 */ {
 
-			if (FAILED(mgr.device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, command_allocator_.Get(), default_pso_->getObject().Get(), IID_PPV_ARGS(&command_list_)))) return false;
+			if (FAILED(mgr.device_->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, command_allocator_.Get(), default_pso_->getPSO().Get(), IID_PPV_ARGS(&command_list_)))) return false;
 			if (FAILED(command_list_->Close())) return false;
 		}
 
@@ -286,15 +286,18 @@ namespace eng {
 			WaitForSingleObject(mgr.fence_event_, INFINITE);
 		}
 
-		frame_index_ = swap_chain_->GetCurrentBackBufferIndex();
-
 		return true;
 	}
 
 	bool GraphicsManager::resetCommandList() {
 		if (FAILED(command_allocator_->Reset())) return false;
-		if (FAILED(command_list_->Reset(command_allocator_.Get(), default_pso_->getObject().Get()))) return false;
+		if (FAILED(command_list_->Reset(command_allocator_.Get(), default_pso_->getPSO().Get()))) return false;
 		return true;
+	}
+
+	void GraphicsManager::setResourceBarrier(ID3D12Resource* rtv, const D3D12_RESOURCE_STATES state_before, const D3D12_RESOURCE_STATES state_after) {
+		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(rtv, state_before, state_after);
+		command_list_->ResourceBarrier(1, &barrier);
 	}
 
 	void GraphicsManager::renderBefore(const D3D12_VIEWPORT& viewport, const D3D12_RECT& scissor_rect, const std::shared_ptr<RenderTargetView>& rtv, const std::shared_ptr<DepthStencilView>& dsv) {
@@ -307,11 +310,7 @@ namespace eng {
 		// GPUコア で使用されるリソースにバリアを張るらしい
 		// 例えば とある GPUコア で使用中のリソースを他の GPUコア が勝手に触れられないようにする処置だろうか
 		// この場合はレンダーターゲット( 描画対象のバックバッファ )にバリアを張っている
-		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-			rtv->getBuffer().Get(),
-			D3D12_RESOURCE_STATE_PRESENT,			// 遷移前はPresent
-			D3D12_RESOURCE_STATE_RENDER_TARGET);	// 遷移後は描画ターゲット
-		command_list_->ResourceBarrier(1, &barrier);
+		setResourceBarrier(rtv->getBuffer().Get(), D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
 
 		// レンダーターゲットの設定
 		command_list_->OMSetRenderTargets(1, &rtv->getHandle().getCpuHandle(), FALSE, &dsv->getHandle().getCpuHandle());
@@ -323,14 +322,8 @@ namespace eng {
 	}
 
 	void GraphicsManager::renderAfter(const std::shared_ptr<RenderTargetView>& rtv) {
-
 		// バックバッファの描画完了を待つためのバリアを設置
-		CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-			rtv->getBuffer().Get(),
-			D3D12_RESOURCE_STATE_RENDER_TARGET,	// 遷移前は描画ターゲット
-			D3D12_RESOURCE_STATE_PRESENT);		// 遷移後はPresent
-		command_list_->ResourceBarrier(1, &barrier);
-
+		setResourceBarrier(rtv->getBuffer().Get(), D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 	}
 
 	bool GraphicsManager::executeCommandList() {
@@ -341,10 +334,11 @@ namespace eng {
 		ID3D12CommandList* ppCommandLists[] = { command_list_.Get() };
 		command_queue_->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
 
-		// フレームを最終出力
-		if (FAILED(swap_chain_->Present(1, 0))) return false;
-
 		return true;
+	}
+
+	bool GraphicsManager::presentSwapChain() {
+		return (!FAILED(swap_chain_->Present(1, 0)));
 	}
 
 }

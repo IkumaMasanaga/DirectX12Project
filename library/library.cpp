@@ -9,6 +9,7 @@ namespace lib {
 		FPSControl::setFPS(60);
 		FPSControl::end_ = std::chrono::system_clock::now();
 		Time::initialize();
+		if (!Input::initialize()) return false;
 
 		return true;
 	}
@@ -17,13 +18,14 @@ namespace lib {
 
 		FPSControl::update();
 		Time::update();
+		if (!Input::update()) return false;
 
 		return true;
 	}
 
 	void Library::finalize() {
 
-
+		Input::finalize();
 
 	}
 

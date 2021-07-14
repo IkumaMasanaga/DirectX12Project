@@ -10,7 +10,7 @@ namespace eng {
 		// PipelineState ( PSO ) の作成では D3D12_GRAPHICS_PIPELINE_STATE_DESC に設定した内容と
 		// ルートシグネチャに設定した内容が使用するシェーダと整合性がとれていなければエラーになる
 		// 例  頂点レイアウトの内容が実際のシェーダと異なる 等
-		if (FAILED(sys::Dx12Manager::getInstance().getDevice()->CreateGraphicsPipelineState(&desc.pso_desc, IID_PPV_ARGS(&ptr->object_)))) return nullptr;
+		if (FAILED(sys::Dx12Manager::getInstance().getDevice()->CreateGraphicsPipelineState(&desc.pso_desc, IID_PPV_ARGS(&ptr->pso_)))) return nullptr;
 
 		ptr->shader_ = desc.shader;
 
