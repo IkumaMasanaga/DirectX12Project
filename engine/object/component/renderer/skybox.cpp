@@ -78,10 +78,6 @@ namespace eng {
 		return true;
 	}
 
-	void Skybox::update() {
-		calcScale();
-	}
-
 	void Skybox::render(const std::shared_ptr<Camera>& camera) {
 
 		GraphicsManager& mgr = GraphicsManager::getInstance();
@@ -89,6 +85,21 @@ namespace eng {
 
 		// カメラの設定
 		lib::Matrix4x4 view_projection = camera->getViewMatrix4x4() * camera->getProjectionMatrix4x4();
+
+		// 中心から頂点までの距離がカメラのファー以内に収まるように調節
+		// far / Boxのサイズ / ルート3 * 2
+		float scale = camera->far_ / 10.0f / 1.7320508f * 2.0f;
+
+		lib::Vector3 cp = camera->getTransform()->getPosition();
+
+		// カメラの中心行列
+		// 回転はさせない
+		lib::Matrix4x4 camera_world = lib::Matrix4x4(
+			scale, 0.0f, 0.0f, 0.0f,
+			0.0f, scale, 0.0f, 0.0f,
+			0.0f, 0.0f, scale, 0.0f,
+			cp.x, cp.y, cp.z, 1.0f
+		);
 
 		std::vector<Mesh::s_ptr>::iterator it = meshs_.begin();
 		while (it != meshs_.end()) {
@@ -112,15 +123,8 @@ namespace eng {
 
 			//--------------------------------------------------
 
-			lib::Vector3 cp = camera->getTransform()->getPosition();
-
 			// ワールド行列
-			lib::Matrix4x4 world = (*it)->transform_->getWorldMatrix4x4() * lib::Matrix4x4(
-				scale_, 0.0f, 0.0f, 0.0f,
-				0.0f, scale_, 0.0f, 0.0f,
-				0.0f, 0.0f, scale_, 0.0f,
-				cp.x, cp.y, cp.z, 1.0f
-			);
+			lib::Matrix4x4 world = (*it)->transform_->getWorldMatrix4x4() * camera_world;
 
 			//全ての変換行列
 			lib::Matrix4x4 mvp = lib::Matrix4x4::createTranspose(world * view_projection);
@@ -156,21 +160,13 @@ namespace eng {
 
 	}
 
-	void Skybox::calcScale() {
-		// 中心から頂点までの距離がカメラのファー以内に収まるように調節
-		// far / Boxのサイズ / ルート3 * 2
-		scale_ = getCamera()->far_ / 10.0f / 1.7320508f * 2.0f;
-	}
-
-	void Skybox::set(const SetDesc& desc) {
-		camera_ = desc.camera;
-		meshs_[0]->material_->tex_diffuse_ = desc.texture_right;
-		meshs_[1]->material_->tex_diffuse_ = desc.texture_left;
-		meshs_[2]->material_->tex_diffuse_ = desc.texture_up;
-		meshs_[3]->material_->tex_diffuse_ = desc.texture_down;
-		meshs_[4]->material_->tex_diffuse_ = desc.texture_forward;
-		meshs_[5]->material_->tex_diffuse_ = desc.texture_back;
-		calcScale();
+	void Skybox::setTextures(const Textures& textures) {
+		meshs_[0]->material_->tex_diffuse_ = textures.right;
+		meshs_[1]->material_->tex_diffuse_ = textures.left;
+		meshs_[2]->material_->tex_diffuse_ = textures.up;
+		meshs_[3]->material_->tex_diffuse_ = textures.down;
+		meshs_[4]->material_->tex_diffuse_ = textures.forward;
+		meshs_[5]->material_->tex_diffuse_ = textures.back;
 	}
 
 }

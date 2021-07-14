@@ -9,6 +9,18 @@ bool SampleScene::initialize() {
 	camera_->getTransform()->rotate(lib::Vector3::RIGHT, lib::Math::toRadian(45.0f));
 	//camera_->addComponent<SampleComponent>();
 
+	// スカイボックスの作成
+	{
+		//eng::Skybox::Textures skybox_textures;
+		//skybox_textures.right = eng::Texture::loadFromFile("resources/texture/skybox/right.bmp");		// 右
+		//skybox_textures.left = eng::Texture::loadFromFile("resources/texture/skybox/left.bmp");			// 左
+		//skybox_textures.up = eng::Texture::loadFromFile("resources/texture/skybox/up.bmp");				// 上
+		//skybox_textures.down = eng::Texture::loadFromFile("resources/texture/skybox/down.bmp");			// 下
+		//skybox_textures.forward = eng::Texture::loadFromFile("resources/texture/skybox/forward.bmp");	// 前
+		//skybox_textures.back = eng::Texture::loadFromFile("resources/texture/skybox/back.bmp");			// 後ろ
+		//camera_->addComponent<eng::Skybox>()->setTextures(skybox_textures);
+	}
+
 	eng::Shape::CreateDesc desc = {};
 	eng::GameObject::s_ptr obj1 = nullptr;
 

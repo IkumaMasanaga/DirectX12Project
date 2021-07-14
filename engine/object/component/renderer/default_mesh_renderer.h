@@ -15,12 +15,12 @@ namespace eng {
 		// ƒƒ“ƒoŠÖ”
 
 		// •`‰æ
-		void render(const std::shared_ptr<Camera>& camera) final override;
+		void render(const std::shared_ptr<Camera>& camera) override;
 
 		//====================================================================================================
 	public:
 		DefaultMeshRenderer() {}
-		~DefaultMeshRenderer() {}
+		virtual ~DefaultMeshRenderer() {}
 
 		//====================================================================================================
 		// ƒƒ“ƒo•Ï”

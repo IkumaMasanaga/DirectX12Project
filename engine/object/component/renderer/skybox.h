@@ -1,48 +1,47 @@
 #pragma once
-#include "renderer.h"
+#include "default_mesh_renderer.h"
 
 
 namespace eng {
 
 	class Texture;
-	class Mesh;
 
-	class Skybox final : public Renderer {
+	class Skybox final : public DefaultMeshRenderer {
 	public:
 		using s_ptr = std::shared_ptr<Skybox>;
 		using w_ptr = std::weak_ptr<Skybox>;
 
-		struct SetDesc {
-			std::shared_ptr<Camera> camera = nullptr;
-			std::shared_ptr<Texture> texture_right = nullptr;
-			std::shared_ptr<Texture> texture_left = nullptr;
-			std::shared_ptr<Texture> texture_up = nullptr;
-			std::shared_ptr<Texture> texture_down = nullptr;
-			std::shared_ptr<Texture> texture_forward = nullptr;
-			std::shared_ptr<Texture> texture_back = nullptr;
+		struct Textures {
+			std::shared_ptr<Texture> right = nullptr;
+			std::shared_ptr<Texture> left = nullptr;
+			std::shared_ptr<Texture> up = nullptr;
+			std::shared_ptr<Texture> down = nullptr;
+			std::shared_ptr<Texture> forward = nullptr;
+			std::shared_ptr<Texture> back = nullptr;
 		};
 
 	private:
-		std::weak_ptr<Camera> camera_;
-		std::vector<std::shared_ptr<Mesh>> meshs_;
-		float scale_ = 1.0f;
+		//====================================================================================================
+		// メンバ関数
 
+		// 生成時
 		bool onCreated() final override;
 
-		void update() final override;
-
+		// 描画
 		void render(const std::shared_ptr<Camera>& camera) final override;
 
-		void calcScale();
-
-		inline std::shared_ptr<Camera> getCamera() { return (camera_.expired()) ? nullptr : camera_.lock(); }
-
+		//====================================================================================================
 	public:
 		Skybox() {}
 		~Skybox() {}
 
-		void set(const SetDesc& desc);
+		//====================================================================================================
+		// メンバ関数
 
+		// テクスチャの設定
+		void setTextures(const Textures& textures);
+
+		//====================================================================================================
 	};
 
 }
